@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英文解釈トレーナー</title>
+<link rel="stylesheet" href="static/styles.css?v=20260630-2">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">Reading Structure Trainer</span>
+      <h1>英文解釈トレーナー</h1>
+    </div>
+    <div class="topActions" role="tablist" aria-label="表示切替">
+      <button class="tabBtn active" id="playerTab" type="button" role="tab" aria-selected="true">生徒</button>
+      <button class="tabBtn" id="editorTab" type="button" role="tab" aria-selected="false">先生</button>
+      <button class="ghost" id="resetProgressBtn" type="button">進捗リセット</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="label">Forward Reading</p>
+      <h2>前から、役割を見抜き、訳を積み上げる。</h2>
+      <p>かたまりごとに S/V/O/C/M を判定し、正解するたびに日本語訳が現れます。節は外側から解き、中身へ進みます。</p>
+    </section>
+
+    <section id="playerView"></section>
+    <section id="editorView" class="hide"></section>
+  </main>
+</div>
+
+<script src="static/app.js?v=20260630-2"></script>
+</body>
+</html>

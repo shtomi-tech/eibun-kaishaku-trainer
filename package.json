@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "build": "node tools/build-netlify.mjs",
+    "deploy": "netlify deploy --prod"
+  }
+}

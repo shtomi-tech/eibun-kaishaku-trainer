@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "id": "eiken2-2026-1",
+    "label": "英検2級 2026年度第1回",
+    "source": "英検2級 2026年度第1回 大問1",
+    "version": 1,
+    "note": "初期たたき台。先生が確認・修正する前提。"
+  },
+  "items": [
+    {
+      "id": "eiken2-2026-1_q1_s1",
+      "source": "英検2級 2026年度第1回 大問1 Q1 / sentence 1",
+      "sentence": "In many countries, the bride wears a white dress at a wedding.",
+      "root": {
+        "chunks": [
+          { "role": "M", "text": "In many countries", "translation": "多くの国では" },
+          { "role": "S", "text": "the bride", "translation": "花嫁は" },
+          { "role": "V", "text": "wears", "translation": "着る" },
+          { "role": "O", "text": "a white dress", "translation": "白いドレスを" },
+          { "role": "M", "text": "at a wedding", "translation": "結婚式で" }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q2_s1",
+      "source": "英検2級 2026年度第1回 大問1 Q2 / sentence 1",
+      "sentence": "The teacher asked her students to find Argentina on a globe.",
+      "root": {
+        "chunks": [
+          { "role": "S", "text": "The teacher", "translation": "先生は" },
+          { "role": "V", "text": "asked", "translation": "頼んだ" },
+          { "role": "O", "text": "her students", "translation": "生徒たちに" },
+          { "role": "C", "text": "to find Argentina", "translation": "アルゼンチンを探すように" },
+          { "role": "M", "text": "on a globe", "translation": "地球儀で" }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q3_s1",
+      "source": "英検2級 2026年度第1回 大問1 Q3 / sentence 1",
+      "sentence": "Yuki only started studying Korean two years ago.",
+      "root": {
+        "chunks": [
+          { "role": "S", "text": "Yuki", "translation": "ユキは" },
+          { "role": "M", "text": "only", "translation": "ほんの" },
+          { "role": "V", "text": "started studying", "translation": "学び始めた" },
+          { "role": "O", "text": "Korean", "translation": "韓国語を" },
+          { "role": "M", "text": "two years ago", "translation": "2年前に" }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q10_s2",
+      "source": "英検2級 2026年度第1回 大問1 Q10 / sentence 2",
+      "sentence": "They had hoped that they would have more time to study.",
+      "root": {
+        "chunks": [
+          { "role": "S", "text": "They", "translation": "彼らは" },
+          { "role": "V", "text": "had hoped", "translation": "望んでいた" },
+          {
+            "role": "O",
+            "text": "that they would have more time to study",
+            "translation": "もっと勉強する時間があることを",
+            "children": {
+              "chunks": [
+                { "role": "接続", "text": "that", "translation": "（ということ）" },
+                { "role": "S", "text": "they", "translation": "彼らが" },
+                { "role": "V", "text": "would have", "translation": "持てるだろう" },
+                { "role": "O", "text": "more time", "translation": "もっと多くの時間を" },
+                { "role": "M", "text": "to study", "translation": "勉強するために" }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q5_s2",
+      "source": "英検2級 2026年度第1回 大問1 Q5 / sentence 2",
+      "sentence": "They teach the students how to communicate, make decisions, and take responsibility.",
+      "root": {
+        "chunks": [
+          { "role": "S", "text": "They", "translation": "彼らは" },
+          { "role": "V", "text": "teach", "translation": "教える" },
+          { "role": "O", "text": "the students", "translation": "生徒たちに" },
+          { "role": "O", "text": "how to communicate, make decisions, and take responsibility", "translation": "意思疎通し、決定し、責任を取る方法を" }
+        ]
+      }
+    }
+  ]
+}
