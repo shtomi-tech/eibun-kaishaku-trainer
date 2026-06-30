@@ -56,6 +56,7 @@ function defaultEditorState() {
     chunks: [],
     selectedChunk: -1,
     savedItems: [],
+    editNote: "",
     rawJson: "",
   };
 }
@@ -786,22 +787,30 @@ function renderEditor() {
     el("div", { class: "sectionHead" },
       el("div", {},
         el("p", { class: "label" }, "Teacher Editor"),
-        el("h2", {}, "教材JSONを作る")
+        el("h2", {}, "教材を編集する")
       ),
       el("button", { class: "ghost", type: "button", onclick: () => { state.editor = defaultEditorState(); renderEditor(); } }, "新規")
     ),
-    renderEditorInputs(),
-    renderEditorTools(),
-    renderValidationBox(validation),
-    renderEditingQueue(),
-    renderEditorChunks(),
+    el("div", { class: "editorWorkbench" },
+      renderEditingQueue(),
+      renderEditorDesk(validation)
+    ),
     renderSavedItems(),
     renderJsonPreview()
   ));
 }
 
+function renderEditorDesk(validation) {
+  return el("div", { class: "editorDesk" },
+    renderEditorInputs(),
+    renderEditorTools(validation),
+    renderValidationBox(validation),
+    renderEditorChunks()
+  );
+}
+
 function renderEditorInputs() {
-  return el("div", { class: "editorGrid" },
+  return el("div", { class: "editorForm" },
     field("教材ID", el("input", {
       value: state.editor.datasetId,
       oninput: (e) => { state.editor.datasetId = slugify(e.target.value) || e.target.value; updateJsonPreviewOnly(); },
@@ -832,16 +841,20 @@ function renderEditorInputs() {
   );
 }
 
-function renderEditorTools() {
-  return el("div", { class: "actions" },
-    el("button", { class: "primary", type: "button", onclick: tokenizeSentence }, "単語に分割"),
-    el("button", { class: "ghost", type: "button", onclick: mergeSelectedWithNext }, "次と結合"),
-    el("button", { class: "ghost", type: "button", onclick: splitSelectedChunk }, "空白で分割"),
-    el("button", { class: "ghost", type: "button", onclick: makeSelectedClause }, "節にする"),
-    el("button", { class: "ghost", type: "button", onclick: addCurrentItemToDataset }, "教材に追加"),
-    el("button", { class: "ghost", type: "button", onclick: importJsonFromTextarea }, "JSON読込"),
-    el("button", { class: "ghost", type: "button", onclick: downloadEditorJson }, "単文JSON保存"),
-    el("button", { class: "primary", type: "button", onclick: downloadDatasetJson }, "教材JSON保存")
+function renderEditorTools(validation) {
+  return el("div", { class: "editorActions" },
+    el("div", { class: "actions" },
+      el("button", { class: "primary", type: "button", onclick: tokenizeSentence }, "自動分割"),
+      el("button", { class: "ghost", type: "button", onclick: () => addChunkAfter(state.editor.chunks.length - 1) }, "chunk追加"),
+      el("button", { class: "ghost", type: "button", onclick: mergeSelectedWithNext, disabled: selectedChunk() ? null : "disabled" }, "次と結合"),
+      el("button", { class: "ghost", type: "button", onclick: splitSelectedChunk, disabled: selectedChunk() ? null : "disabled" }, "分割"),
+      el("button", { class: "ghost", type: "button", onclick: makeSelectedClause, disabled: selectedChunk() ? null : "disabled" }, "節化")
+    ),
+    el("div", { class: "actions saveActions" },
+      el("button", { class: "ghost", type: "button", onclick: () => keepCurrentItemEditing() }, "編集待ちでキープ"),
+      el("button", { class: "primary", type: "button", onclick: () => saveCurrentItemReady() }, "完成として保存"),
+      el("button", { class: "ghost", type: "button", onclick: downloadDatasetJson }, "教材JSON保存")
+    )
   );
 }
 
@@ -886,6 +899,19 @@ function makeSelectedClause() {
   renderEditor();
 }
 
+function addChunkAfter(index) {
+  const insertAt = Math.max(0, Math.min(state.editor.chunks.length, index + 1));
+  state.editor.chunks.splice(insertAt, 0, { text: "", role: "M", translation: "" });
+  state.editor.selectedChunk = insertAt;
+  renderEditor();
+}
+
+function deleteChunk(index) {
+  state.editor.chunks.splice(index, 1);
+  if (state.editor.selectedChunk >= state.editor.chunks.length) state.editor.selectedChunk = state.editor.chunks.length - 1;
+  renderEditor();
+}
+
 function ensureChunkChildren(chunk) {
   if (chunk.children?.chunks?.length) return;
   const words = chunk.text.match(/[A-Za-z0-9]+(?:'[A-Za-z0-9]+)?|[.,!?;:()]/g) || [chunk.text];
@@ -900,9 +926,15 @@ function ensureChunkChildren(chunk) {
 
 function renderEditorChunks() {
   if (!state.editor.chunks.length) {
-    return el("div", { class: "emptyBox" }, "英文を入力して「単語に分割」を押してください。");
+    return el("div", { class: "emptyBox chunkEmpty" }, "chunkがありません。");
   }
   return el("div", { class: "editorChunks" },
+    el("div", { class: "chunkHeader" },
+      el("p", { class: "label" }, "Chunks"),
+      el("div", { class: "roleLegend" },
+        ...ROLES.map((role) => el("span", {}, roleLabel(role)))
+      )
+    ),
     ...state.editor.chunks.map((chunk, index) => renderEditableChunk(chunk, index))
   );
 }
@@ -910,12 +942,18 @@ function renderEditorChunks() {
 function renderEditableChunk(chunk, index) {
   const selected = state.editor.selectedChunk === index;
   return el("div", { class: `editChunk ${selected ? "selected" : ""}` },
-    el("button", {
-      class: "chunkSelect",
-      type: "button",
-      onclick: () => { state.editor.selectedChunk = index; renderEditor(); },
-    }, chunk.text || "(empty)"),
-    selected ? el("div", { class: "chunkForm" },
+    el("div", { class: "chunkTop" },
+      el("button", {
+        class: "chunkSelect",
+        type: "button",
+        onclick: () => { state.editor.selectedChunk = index; renderEditor(); },
+      }, `${String(index + 1).padStart(2, "0")} ${chunk.text || "(empty)"}`),
+      el("div", { class: "childActions" },
+        el("button", { class: "tiny ghost", type: "button", onclick: () => addChunkAfter(index) }, "後ろに追加"),
+        el("button", { class: "tiny ghost", type: "button", onclick: () => deleteChunk(index) }, "削除")
+      )
+    ),
+    el("div", { class: "chunkForm" },
       field("Text", el("input", {
         value: chunk.text,
         oninput: (e) => { chunk.text = e.target.value; updateJsonPreviewOnly(); },
@@ -926,7 +964,7 @@ function renderEditableChunk(chunk, index) {
         oninput: (e) => { chunk.translation = e.target.value; updateJsonPreviewOnly(); },
       })),
       chunk.children ? renderChildEditor(chunk, [index]) : null
-    ) : null
+    )
   );
 }
 
@@ -936,7 +974,18 @@ function roleSelect(chunk) {
   }, ...ROLES.concat("接続").map((role) => el("option", {
     value: role,
     selected: chunk.role === role ? "selected" : null,
-  }, role)));
+  }, roleLabel(role))));
+}
+
+function roleLabel(role) {
+  return {
+    S: "S 主語",
+    V: "V 動詞",
+    O: "O 目的語",
+    C: "C 補語",
+    M: "M 修飾",
+    "接続": "接続",
+  }[role] || role;
 }
 
 function renderChildEditor(parentChunk, path) {
@@ -1004,9 +1053,9 @@ function renderValidationBox(validation) {
 function renderEditingQueue() {
   const queue = editingItems();
   if (!queue.length) {
-    return el("div", { class: "editingQueue emptyBox" }, "編集待ちの文はありません。");
+    return el("aside", { class: "editingQueue emptyBox" }, "編集待ちの文はありません。");
   }
-  return el("div", { class: "editingQueue" },
+  return el("aside", { class: "editingQueue" },
     el("div", { class: "sectionHead compact" },
       el("div", {},
         el("p", { class: "label" }, "Editing Queue"),
@@ -1024,7 +1073,7 @@ function renderEditingQueue() {
           class: "tiny ghost",
           type: "button",
           onclick: () => loadEditorItem(item),
-        }, "編集")
+        }, state.editor.itemId === item.id ? "編集中" : "開く")
       ))
     )
   );
@@ -1097,7 +1146,20 @@ function addCurrentItemToDataset() {
   const existingIndex = state.editor.savedItems.findIndex((saved) => saved.id === item.id);
   if (existingIndex >= 0) state.editor.savedItems[existingIndex] = item;
   else state.editor.savedItems.push(item);
+  const datasetIndex = (state.dataset?.items || []).findIndex((saved) => saved.id === item.id);
+  if (datasetIndex >= 0) state.dataset.items[datasetIndex] = cloneItem(item);
+  else if (state.dataset?.items) state.dataset.items.push(cloneItem(item));
   renderEditor();
+}
+
+function keepCurrentItemEditing() {
+  state.editor.status = "editing";
+  addCurrentItemToDataset();
+}
+
+function saveCurrentItemReady() {
+  state.editor.status = "ready";
+  addCurrentItemToDataset();
 }
 
 function loadEditorItem(item) {
@@ -1107,6 +1169,7 @@ function loadEditorItem(item) {
   state.editor.sentence = item.sentence || "";
   state.editor.chunks = cloneItem(item).root?.chunks || [];
   state.editor.selectedChunk = state.editor.chunks.length ? 0 : -1;
+  state.editor.editNote = item.editNote || "";
   renderEditor();
 }
 
@@ -1133,7 +1196,7 @@ function editorItem() {
   };
   if (state.editor.status === "editing") {
     item.status = "editing";
-    item.editNote = "編集待ち: chunk/role/translationを確定してください。";
+    item.editNote = state.editor.editNote || "編集待ち: chunk/role/translationを確定してください。";
   }
   return item;
 }
@@ -1141,7 +1204,7 @@ function editorItem() {
 function editorDataset() {
   const current = editorItem();
   const validation = validateEditorItem(current);
-  const hasCurrent = validation.errors.length === 0;
+  const hasCurrent = current.status === "editing" || validation.errors.length === 0;
   const items = state.editor.savedItems.slice();
   if (hasCurrent && !items.some((item) => item.id === current.id)) items.push(current);
   return {
@@ -1158,7 +1221,12 @@ function editorDataset() {
 function renderJsonPreview() {
   const json = JSON.stringify(editorDataset(), null, 2);
   state.editor.rawJson = json;
-  return el("div", { class: "jsonArea" },
+  return el("details", { class: "jsonArea" },
+    el("summary", {}, "JSON / 書き出し"),
+    el("div", { class: "actions advancedActions" },
+      el("button", { class: "ghost", type: "button", onclick: importJsonFromTextarea }, "JSON読込"),
+      el("button", { class: "ghost", type: "button", onclick: downloadEditorJson }, "単文JSON保存")
+    ),
     field("JSONプレビュー / 読込欄", el("textarea", {
       id: "jsonPreview",
       rows: "14",
@@ -1184,10 +1252,12 @@ function importJsonFromTextarea() {
       datasetLabel: parsed.meta?.label || state.editor.datasetLabel,
       source: item.source || "JSON読込",
       itemId: item.id || `custom_${Date.now()}`,
+      status: item.status || "ready",
       sentence: item.sentence || "",
       chunks: cloneItem(item).root.chunks,
       selectedChunk: item.root.chunks.length ? 0 : -1,
       savedItems,
+      editNote: item.editNote || "",
       rawJson: text,
     };
     renderEditor();

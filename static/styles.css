@@ -587,20 +587,64 @@ h3 { font-size: 20px; }
   font-size: 12px;
 }
 
-.editorGrid {
+.editorWorkbench {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.editorDesk {
+  min-width: 0;
+}
+
+.editorForm {
   display: grid;
   grid-template-columns: repeat(2, minmax(180px, 1fr));
   gap: 12px;
 }
 
-.editorGrid .field:last-child {
+.editorForm .field:last-child {
   grid-column: 1 / -1;
+}
+
+.editorActions {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.saveActions {
+  border-top: 1px solid var(--ink);
+  padding-top: 10px;
 }
 
 .editorChunks {
   display: grid;
   gap: 10px;
   margin-top: 16px;
+}
+
+.chunkHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.roleLegend {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.roleLegend span {
+  border: 1px solid var(--ink);
+  padding: 2px 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--parchment);
 }
 
 .editChunk {
@@ -612,13 +656,22 @@ h3 { font-size: 20px; }
   border-color: var(--ink);
 }
 
+.chunkTop {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: start;
+  border-bottom: 1px solid var(--line);
+}
+
 .chunkSelect {
   width: 100%;
   background: transparent;
   color: var(--ink);
   text-align: left;
   border: 0;
-  border-bottom: 1px solid var(--line);
+  min-height: 40px;
+  overflow-wrap: anywhere;
 }
 
 .editChunk.selected .chunkSelect {
@@ -628,9 +681,13 @@ h3 { font-size: 20px; }
 
 .chunkForm {
   display: grid;
-  grid-template-columns: minmax(160px, 1fr) 120px minmax(180px, 1fr);
+  grid-template-columns: minmax(160px, 1fr) 130px minmax(180px, 1fr);
   gap: 10px;
   padding: 12px;
+}
+
+.chunkEmpty {
+  border: 1px dashed var(--ink);
 }
 
 .childEditor {
@@ -662,6 +719,9 @@ h3 { font-size: 20px; }
 .savedList {
   display: grid;
   gap: 8px;
+  max-height: 520px;
+  overflow: auto;
+  padding-right: 2px;
 }
 
 .savedRow {
@@ -680,6 +740,19 @@ h3 { font-size: 20px; }
 
 .jsonArea {
   margin-top: 16px;
+  border-top: 2px solid var(--ink);
+  padding-top: 12px;
+}
+
+.jsonArea summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.advancedActions {
+  margin: 10px 0;
 }
 
 .jsonArea textarea {
@@ -690,8 +763,10 @@ h3 { font-size: 20px; }
 
 @media (max-width: 820px) {
   .controls,
-  .editorGrid,
+  .editorWorkbench,
+  .editorForm,
   .chunkForm,
+  .chunkTop,
   .childRow,
   .savedRow {
     grid-template-columns: 1fr;
