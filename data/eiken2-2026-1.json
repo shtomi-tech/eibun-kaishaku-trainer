@@ -4,7 +4,9 @@
     "label": "英検2級 2026年度第1回",
     "source": "英検2級 2026年度第1回 大問1",
     "version": 1,
-    "note": "初期たたき台。先生が確認・修正する前提。"
+    "note": "英検2級 大問1の保存済み問題を完全文化して文単位で取り込み。status=editing は編集待ち。",
+    "importedFrom": "英語/英検2級_大問1アプリ/data/questions_2026-1.json",
+    "importedAt": "2026-06-30T13:45:41.088Z"
   },
   "items": [
     {
@@ -13,11 +15,49 @@
       "sentence": "In many countries, the bride wears a white dress at a wedding.",
       "root": {
         "chunks": [
-          { "role": "M", "text": "In many countries", "translation": "多くの国では" },
-          { "role": "S", "text": "the bride", "translation": "花嫁は" },
-          { "role": "V", "text": "wears", "translation": "着る" },
-          { "role": "O", "text": "a white dress", "translation": "白いドレスを" },
-          { "role": "M", "text": "at a wedding", "translation": "結婚式で" }
+          {
+            "role": "M",
+            "text": "In many countries",
+            "translation": "多くの国では"
+          },
+          {
+            "role": "S",
+            "text": "the bride",
+            "translation": "花嫁は"
+          },
+          {
+            "role": "V",
+            "text": "wears",
+            "translation": "着る"
+          },
+          {
+            "role": "O",
+            "text": "a white dress",
+            "translation": "白いドレスを"
+          },
+          {
+            "role": "M",
+            "text": "at a wedding",
+            "translation": "結婚式で"
+          }
+        ]
+      },
+      "status": "ready"
+    },
+    {
+      "id": "eiken2-2026-1_q1_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q1 / sentence 2",
+      "sentence": "However, in some countries, she may wear a red dress.",
+      "translation": "多くの国では、花嫁は結婚式で白いドレスを着る。しかし一部の国では赤いドレスを着ることもある。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "However, in some countries, she may wear a red dress.",
+            "translation": ""
+          }
         ]
       }
     },
@@ -27,11 +67,49 @@
       "sentence": "The teacher asked her students to find Argentina on a globe.",
       "root": {
         "chunks": [
-          { "role": "S", "text": "The teacher", "translation": "先生は" },
-          { "role": "V", "text": "asked", "translation": "頼んだ" },
-          { "role": "O", "text": "her students", "translation": "生徒たちに" },
-          { "role": "C", "text": "to find Argentina", "translation": "アルゼンチンを探すように" },
-          { "role": "M", "text": "on a globe", "translation": "地球儀で" }
+          {
+            "role": "S",
+            "text": "The teacher",
+            "translation": "先生は"
+          },
+          {
+            "role": "V",
+            "text": "asked",
+            "translation": "頼んだ"
+          },
+          {
+            "role": "O",
+            "text": "her students",
+            "translation": "生徒たちに"
+          },
+          {
+            "role": "C",
+            "text": "to find Argentina",
+            "translation": "アルゼンチンを探すように"
+          },
+          {
+            "role": "M",
+            "text": "on a globe",
+            "translation": "地球儀で"
+          }
+        ]
+      },
+      "status": "ready"
+    },
+    {
+      "id": "eiken2-2026-1_q2_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q2 / sentence 2",
+      "sentence": "She wanted them to learn about countries that are far away from Japan.",
+      "translation": "先生は生徒たちに地球儀でアルゼンチンを探すよう言った。日本から遠い国について学ばせたかったのだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "She wanted them to learn about countries that are far away from Japan.",
+            "translation": ""
+          }
         ]
       }
     },
@@ -41,35 +119,167 @@
       "sentence": "Yuki only started studying Korean two years ago.",
       "root": {
         "chunks": [
-          { "role": "S", "text": "Yuki", "translation": "ユキは" },
-          { "role": "M", "text": "only", "translation": "ほんの" },
-          { "role": "V", "text": "started studying", "translation": "学び始めた" },
-          { "role": "O", "text": "Korean", "translation": "韓国語を" },
-          { "role": "M", "text": "two years ago", "translation": "2年前に" }
+          {
+            "role": "S",
+            "text": "Yuki",
+            "translation": "ユキは"
+          },
+          {
+            "role": "M",
+            "text": "only",
+            "translation": "ほんの"
+          },
+          {
+            "role": "V",
+            "text": "started studying",
+            "translation": "学び始めた"
+          },
+          {
+            "role": "O",
+            "text": "Korean",
+            "translation": "韓国語を"
+          },
+          {
+            "role": "M",
+            "text": "two years ago",
+            "translation": "2年前に"
+          }
+        ]
+      },
+      "status": "ready"
+    },
+    {
+      "id": "eiken2-2026-1_q3_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q3 / sentence 2",
+      "sentence": "Everyone is surprised by how quickly she has learned the language.",
+      "translation": "ユキは2年前に韓国語を学び始めたばかりだが、もう難なく新聞を読める。誰もが習得の速さに驚いている。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Everyone is surprised by how quickly she has learned the language.",
+            "translation": ""
+          }
         ]
       }
     },
     {
-      "id": "eiken2-2026-1_q10_s2",
-      "source": "英検2級 2026年度第1回 大問1 Q10 / sentence 2",
-      "sentence": "They had hoped that they would have more time to study.",
+      "id": "eiken2-2026-1_q4_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 1",
+      "sentence": "A: Are you all right?",
+      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
       "root": {
         "chunks": [
-          { "role": "S", "text": "They", "translation": "彼らは" },
-          { "role": "V", "text": "had hoped", "translation": "望んでいた" },
           {
-            "role": "O",
-            "text": "that they would have more time to study",
-            "translation": "もっと勉強する時間があることを",
-            "children": {
-              "chunks": [
-                { "role": "接続", "text": "that", "translation": "（ということ）" },
-                { "role": "S", "text": "they", "translation": "彼らが" },
-                { "role": "V", "text": "would have", "translation": "持てるだろう" },
-                { "role": "O", "text": "more time", "translation": "もっと多くの時間を" },
-                { "role": "M", "text": "to study", "translation": "勉強するために" }
-              ]
-            }
+            "role": "M",
+            "text": "A: Are you all right?",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q4_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 2",
+      "sentence": "You have a tendency to be quiet when you're worried.",
+      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "You have a tendency to be quiet when you're worried.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q4_s3",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 3",
+      "sentence": "B: Do I?",
+      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "B: Do I?",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q4_s4",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 4",
+      "sentence": "I never realized I was like that.",
+      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "I never realized I was like that.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q4_s5",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 5",
+      "sentence": "I'm fine.",
+      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "I'm fine.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q4_s6",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 6",
+      "sentence": "I just don't have much to say today.",
+      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "I just don't have much to say today.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q5_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q5 / sentence 1",
+      "sentence": "Teachers at Billings Academy try to foster leadership qualities in their students.",
+      "translation": "ビリングズ学園の教師は生徒のリーダーシップ資質を育もうとする。意思疎通・意思決定・責任の取り方を教えている。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Teachers at Billings Academy try to foster leadership qualities in their students.",
+            "translation": ""
           }
         ]
       }
@@ -80,10 +290,472 @@
       "sentence": "They teach the students how to communicate, make decisions, and take responsibility.",
       "root": {
         "chunks": [
-          { "role": "S", "text": "They", "translation": "彼らは" },
-          { "role": "V", "text": "teach", "translation": "教える" },
-          { "role": "O", "text": "the students", "translation": "生徒たちに" },
-          { "role": "O", "text": "how to communicate, make decisions, and take responsibility", "translation": "意思疎通し、決定し、責任を取る方法を" }
+          {
+            "role": "S",
+            "text": "They",
+            "translation": "彼らは"
+          },
+          {
+            "role": "V",
+            "text": "teach",
+            "translation": "教える"
+          },
+          {
+            "role": "O",
+            "text": "the students",
+            "translation": "生徒たちに"
+          },
+          {
+            "role": "O",
+            "text": "how to communicate, make decisions, and take responsibility",
+            "translation": "意思疎通し、決定し、責任を取る方法を"
+          }
+        ]
+      },
+      "status": "ready"
+    },
+    {
+      "id": "eiken2-2026-1_q6_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q6 / sentence 1",
+      "sentence": "On a typical Saturday night, Mr. and Mrs. Nelson order pizza and watch TV together.",
+      "translation": "いつもの土曜の夜、ネルソン夫妻はピザを注文して一緒にテレビを見る。だが時にはレストランに出かける。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "On a typical Saturday night, Mr. and Mrs. Nelson order pizza and watch TV together.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q6_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q6 / sentence 2",
+      "sentence": "But sometimes, they go out to a restaurant.",
+      "translation": "いつもの土曜の夜、ネルソン夫妻はピザを注文して一緒にテレビを見る。だが時にはレストランに出かける。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "But sometimes, they go out to a restaurant.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q7_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q7 / sentence 1",
+      "sentence": "When the movie ended, many people in the theater began to weep.",
+      "translation": "映画が終わると、劇場の多くの人がすすり泣き始めた。物語はとても悲しかった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "When the movie ended, many people in the theater began to weep.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q7_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q7 / sentence 2",
+      "sentence": "The story was very sad.",
+      "translation": "映画が終わると、劇場の多くの人がすすり泣き始めた。物語はとても悲しかった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The story was very sad.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q8_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q8 / sentence 1",
+      "sentence": "The biology professor showed his students some videos of living cells.",
+      "translation": "生物学の教授は生きた細胞の動画を見せた。細胞の働きを（実例で）説明したかったのだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The biology professor showed his students some videos of living cells.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q8_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q8 / sentence 2",
+      "sentence": "He wanted to illustrate how cells work.",
+      "translation": "生物学の教授は生きた細胞の動画を見せた。細胞の働きを（実例で）説明したかったのだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "He wanted to illustrate how cells work.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q9_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q9 / sentence 1",
+      "sentence": "The Green Wolves and the Blue Stars were very evenly matched in the championship game.",
+      "translation": "決勝戦でグリーン・ウルブズとブルー・スターズは実力伯仲だった。ウルブズは試合終了間際に得点し、かろうじて勝った。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The Green Wolves and the Blue Stars were very evenly matched in the championship game.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q9_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q9 / sentence 2",
+      "sentence": "The Green Wolves barely won when they scored a goal in the last seconds of the game.",
+      "translation": "決勝戦でグリーン・ウルブズとブルー・スターズは実力伯仲だった。ウルブズは試合終了間際に得点し、かろうじて勝った。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The Green Wolves barely won when they scored a goal in the last seconds of the game.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q10_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q10 / sentence 1",
+      "sentence": "When the teacher said there would be a test next week, the students frowned.",
+      "translation": "来週テストがあると先生が言うと、生徒たちは顔をしかめた。もっと勉強する時間があると思っていたのだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "When the teacher said there would be a test next week, the students frowned.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q10_s2",
+      "source": "英検2級 2026年度第1回 大問1 Q10 / sentence 2",
+      "sentence": "They had hoped that they would have more time to study.",
+      "root": {
+        "chunks": [
+          {
+            "role": "S",
+            "text": "They",
+            "translation": "彼らは"
+          },
+          {
+            "role": "V",
+            "text": "had hoped",
+            "translation": "望んでいた"
+          },
+          {
+            "role": "O",
+            "text": "that they would have more time to study",
+            "translation": "もっと勉強する時間があることを",
+            "children": {
+              "chunks": [
+                {
+                  "role": "接続",
+                  "text": "that",
+                  "translation": "（ということ）"
+                },
+                {
+                  "role": "S",
+                  "text": "they",
+                  "translation": "彼らが"
+                },
+                {
+                  "role": "V",
+                  "text": "would have",
+                  "translation": "持てるだろう"
+                },
+                {
+                  "role": "O",
+                  "text": "more time",
+                  "translation": "もっと多くの時間を"
+                },
+                {
+                  "role": "M",
+                  "text": "to study",
+                  "translation": "勉強するために"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "status": "ready"
+    },
+    {
+      "id": "eiken2-2026-1_q11_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q11 / sentence 1",
+      "sentence": "As a general rule, people should drink eight glasses of water a day to stay healthy.",
+      "translation": "一般的には、健康のため1日コップ8杯の水を飲むべきだとされる。ただし、人によってはこれより多くも少なくも必要になりうる。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "As a general rule, people should drink eight glasses of water a day to stay healthy.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q11_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q11 / sentence 2",
+      "sentence": "However, some people may need more or less than this.",
+      "translation": "一般的には、健康のため1日コップ8杯の水を飲むべきだとされる。ただし、人によってはこれより多くも少なくも必要になりうる。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "However, some people may need more or less than this.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q12_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q12 / sentence 1",
+      "sentence": "Ben moved out of his parents' house and into an apartment last week.",
+      "translation": "ベンは先週、実家を出てアパートに引っ越した。今は料理や掃除など、すべてを自分一人でやらねばならない。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Ben moved out of his parents' house and into an apartment last week.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q12_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q12 / sentence 2",
+      "sentence": "Now, he has to do everything on his own, like cooking and cleaning.",
+      "translation": "ベンは先週、実家を出てアパートに引っ越した。今は料理や掃除など、すべてを自分一人でやらねばならない。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Now, he has to do everything on his own, like cooking and cleaning.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q13_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q13 / sentence 1",
+      "sentence": "In the meeting, the president said that he could not go along with the plan to expand the office because it would be too expensive.",
+      "translation": "会議で社長は、費用がかかりすぎるため事務所拡張の計画には賛成できないと述べた。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "In the meeting, the president said that he could not go along with the plan to expand the office because it would be too expensive.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q14_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q14 / sentence 1",
+      "sentence": "After a series of tests, the doctors discovered that Masahiro had a rare illness.",
+      "translation": "一連の検査の後、医師たちはマサヒロが珍しい病気だと突き止めた。すぐに治療を始めた。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "After a series of tests, the doctors discovered that Masahiro had a rare illness.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q14_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q14 / sentence 2",
+      "sentence": "They immediately started treating him.",
+      "translation": "一連の検査の後、医師たちはマサヒロが珍しい病気だと突き止めた。すぐに治療を始めた。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "They immediately started treating him.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q15_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q15 / sentence 1",
+      "sentence": "A: Our presentation next week will include a lot of data.",
+      "translation": "A: 来週の発表は大量のデータを含む。準備は大変だ。 B: つまり、すごく忙しくなるってことだね！ さっそく始めよう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "A: Our presentation next week will include a lot of data.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q15_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q15 / sentence 2",
+      "sentence": "It will take a lot of work to prepare.",
+      "translation": "A: 来週の発表は大量のデータを含む。準備は大変だ。 B: つまり、すごく忙しくなるってことだね！ さっそく始めよう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "It will take a lot of work to prepare.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q15_s3",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q15 / sentence 3",
+      "sentence": "B: In other words, we are going to be very busy!",
+      "translation": "A: 来週の発表は大量のデータを含む。準備は大変だ。 B: つまり、すごく忙しくなるってことだね！ さっそく始めよう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "B: In other words, we are going to be very busy!",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q15_s4",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q15 / sentence 4",
+      "sentence": "Let's get started right away.",
+      "translation": "A: 来週の発表は大量のデータを含む。準備は大変だ。 B: つまり、すごく忙しくなるってことだね！ さっそく始めよう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Let's get started right away.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q16_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q16 / sentence 1",
+      "sentence": "The two paintings looked distinct from each other at first, but when John looked more closely, he saw that they were very similar in one way.",
+      "translation": "2枚の絵は最初は互いに別物に見えたが、ジョンがよく見ると、ある点で非常に似ていることがわかった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The two paintings looked distinct from each other at first, but when John looked more closely, he saw that they were very similar in one way.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q17_s1",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q17 / sentence 1",
+      "sentence": "The company had to lay off some of its workers because it was losing money.",
+      "translation": "その会社は赤字のため一部の従業員を解雇せざるをえなかった。とても難しい決断だった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The company had to lay off some of its workers because it was losing money.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken2-2026-1_q17_s2",
+      "status": "editing",
+      "source": "英検2級 2026年度第1回 大問1 Q17 / sentence 2",
+      "sentence": "It was a very difficult decision to make.",
+      "translation": "その会社は赤字のため一部の従業員を解雇せざるをえなかった。とても難しい決断だった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "It was a very difficult decision to make.",
+            "translation": ""
+          }
         ]
       }
     }

@@ -51,6 +51,7 @@ function defaultEditorState() {
     datasetLabel: "自作 英文解釈",
     source: "手入力",
     itemId: `custom_${new Date().toISOString().slice(0, 10).replaceAll("-", "")}`,
+    status: "ready",
     sentence: "",
     chunks: [],
     selectedChunk: -1,
@@ -298,12 +299,24 @@ async function loadDataset(datasetId) {
   state.progress = loadProgress();
   if (state.progress.lastItemId) {
     const item = findItem(state.progress.lastItemId);
-    if (item) state.session = newSession(item, { countAttempt: false });
+    if (item && isReadyItem(item)) state.session = newSession(item, { countAttempt: false });
   }
 }
 
 function findItem(itemId) {
   return (state.dataset?.items || []).find((item) => item.id === itemId);
+}
+
+function isReadyItem(item) {
+  return item?.status !== "editing";
+}
+
+function readyItems() {
+  return (state.dataset?.items || []).filter(isReadyItem);
+}
+
+function editingItems() {
+  return (state.dataset?.items || []).filter((item) => item.status === "editing");
 }
 
 function bindShell() {
@@ -405,7 +418,8 @@ function renderControls() {
       class: "ghost",
       type: "button",
       onclick: () => {
-        const item = findItem(state.progress.lastItemId) || state.dataset.items[0];
+        const lastItem = findItem(state.progress.lastItemId);
+        const item = (isReadyItem(lastItem) && lastItem) || readyItems()[0];
         if (item) {
           state.session = newSession(item);
           render();
@@ -423,17 +437,18 @@ function field(label, control) {
 }
 
 function nextItem() {
-  return (state.dataset?.items || []).find((item) => !isCleared(item.id)) || state.dataset?.items?.[0] || null;
+  return readyItems().find((item) => !isCleared(item.id)) || readyItems()[0] || null;
 }
 
 function reviewItem() {
-  return (state.dataset?.items || []).find((item) => isReviewNeeded(item.id)) || null;
+  return readyItems().find((item) => isReviewNeeded(item.id)) || null;
 }
 
 function filterItems(items) {
-  if (state.playerFilter === "open") return items.filter((item) => !isCleared(item.id));
-  if (state.playerFilter === "review") return items.filter((item) => isReviewNeeded(item.id));
-  if (state.playerFilter === "cleared") return items.filter((item) => isCleared(item.id));
+  if (state.playerFilter === "open") return items.filter((item) => isReadyItem(item) && !isCleared(item.id));
+  if (state.playerFilter === "review") return items.filter((item) => isReadyItem(item) && isReviewNeeded(item.id));
+  if (state.playerFilter === "cleared") return items.filter((item) => isReadyItem(item) && isCleared(item.id));
+  if (state.playerFilter === "editing") return items.filter((item) => !isReadyItem(item));
   return items;
 }
 
@@ -443,17 +458,21 @@ function filterLabel(filter) {
     open: "未クリア",
     review: "復習",
     cleared: "クリア済み",
+    editing: "編集待ち",
   }[filter] || "すべて";
 }
 
 function renderSummary() {
   const items = state.dataset?.items || [];
-  const cleared = items.filter((item) => isCleared(item.id)).length;
-  const review = items.filter((item) => isReviewNeeded(item.id)).length;
+  const ready = items.filter(isReadyItem);
+  const editing = items.filter((item) => !isReadyItem(item)).length;
+  const cleared = ready.filter((item) => isCleared(item.id)).length;
+  const review = ready.filter((item) => isReviewNeeded(item.id)).length;
   const mistakeTotal = Object.values(state.progress.mistakes).flatMap((row) => Object.values(row)).reduce((a, b) => a + b, 0);
   return el("section", { class: "stats" },
-    statCell(cleared, `${items.length}`, "クリア済み"),
-    statCell(review, `${items.length}`, "復習対象"),
+    statCell(cleared, `${ready.length}`, "クリア済み"),
+    statCell(editing, `${items.length}`, "編集待ち"),
+    statCell(review, `${ready.length}`, "復習対象"),
     statCell(mistakeTotal, "", "誤答記録"),
     statCell(roleWeakestLabel(), "", "弱点 role")
   );
@@ -675,10 +694,13 @@ function renderItemList() {
       ...visibleItems.map((item) => {
         const att = itemAttempt(item.id);
         const originalIndex = items.findIndex((candidate) => candidate.id === item.id);
+        const ready = isReadyItem(item);
         return el("button", {
           type: "button",
-          class: `itemRow ${isCleared(item.id) ? "cleared" : ""} ${isReviewNeeded(item.id) ? "review" : ""}`,
+          class: `itemRow ${isCleared(item.id) ? "cleared" : ""} ${isReviewNeeded(item.id) ? "review" : ""} ${!ready ? "editing" : ""}`,
+          disabled: ready ? null : "disabled",
           onclick: () => {
+            if (!ready) return;
             state.session = newSession(item);
             render();
           },
@@ -686,7 +708,9 @@ function renderItemList() {
           el("span", { class: "itemNo" }, String(originalIndex + 1).padStart(2, "0")),
           el("span", { class: "itemMain" },
             el("strong", {}, item.sentence),
-            el("small", {}, `${item.source || ""} / 挑戦 ${att.attempts || 0} / 正解 ${att.correct || 0} / 誤答 ${att.wrong || 0}${att.lastAt ? ` / 最終 ${formatDateTime(att.lastAt)}` : ""}`)
+            el("small", {}, ready
+              ? `${item.source || ""} / 挑戦 ${att.attempts || 0} / 正解 ${att.correct || 0} / 誤答 ${att.wrong || 0}${att.lastAt ? ` / 最終 ${formatDateTime(att.lastAt)}` : ""}`
+              : `${item.source || ""} / ${item.editNote || "編集待ち"}`)
           ),
           el("span", { class: "itemStatus" }, itemStatusLabel(item))
         );
@@ -708,6 +732,7 @@ function formatDateTime(value) {
 }
 
 function itemStatusLabel(item) {
+  if (!isReadyItem(item)) return "EDIT";
   const att = itemAttempt(item.id);
   if (isReviewNeeded(item.id)) return "REVIEW";
   if (isCleared(item.id)) return "CLEAR";
@@ -715,14 +740,16 @@ function itemStatusLabel(item) {
 }
 
 function renderFilterButtons(items) {
+  const ready = items.filter(isReadyItem);
   const counts = {
     all: items.length,
-    open: items.filter((item) => !isCleared(item.id)).length,
-    review: items.filter((item) => isReviewNeeded(item.id)).length,
-    cleared: items.filter((item) => isCleared(item.id)).length,
+    open: ready.filter((item) => !isCleared(item.id)).length,
+    review: ready.filter((item) => isReviewNeeded(item.id)).length,
+    cleared: ready.filter((item) => isCleared(item.id)).length,
+    editing: items.filter((item) => !isReadyItem(item)).length,
   };
   return el("div", { class: "filterButtons", role: "group", "aria-label": "文リスト表示" },
-    ...["all", "open", "review", "cleared"].map((filter) => el("button", {
+    ...["all", "open", "review", "cleared", "editing"].map((filter) => el("button", {
       type: "button",
       class: `filterBtn ${state.playerFilter === filter ? "active" : ""}`,
       onclick: () => {
@@ -766,6 +793,7 @@ function renderEditor() {
     renderEditorInputs(),
     renderEditorTools(),
     renderValidationBox(validation),
+    renderEditingQueue(),
     renderEditorChunks(),
     renderSavedItems(),
     renderJsonPreview()
@@ -790,6 +818,12 @@ function renderEditorInputs() {
       value: state.editor.source,
       oninput: (e) => { state.editor.source = e.target.value; updateJsonPreviewOnly(); },
     })),
+    field("状態", el("select", {
+      onchange: (e) => { state.editor.status = e.target.value; updateJsonPreviewOnly(); },
+    },
+      el("option", { value: "ready", selected: state.editor.status !== "editing" ? "selected" : null }, "解析済み"),
+      el("option", { value: "editing", selected: state.editor.status === "editing" ? "selected" : null }, "編集待ち")
+    )),
     field("英文", el("textarea", {
       rows: "3",
       placeholder: "例: I think that he is honest.",
@@ -958,9 +992,40 @@ function renderChildEditor(parentChunk, path) {
 function renderValidationBox(validation) {
   const ok = validation.errors.length === 0;
   return el("div", { class: `validationBox ${ok ? "ok" : "warn"}` },
-    el("p", { class: "label" }, ok ? "Ready" : "Check"),
-    ok ? el("p", {}, "この文はプレイヤーで使用できます。") : el("ul", {},
+    el("p", { class: "label" }, state.editor.status === "editing" ? "Editing" : ok ? "Ready" : "Check"),
+    state.editor.status === "editing"
+      ? el("p", {}, "編集待ちとして保持します。学習画面では出題されません。")
+      : ok ? el("p", {}, "この文はプレイヤーで使用できます。") : el("ul", {},
       ...validation.errors.map((message) => el("li", {}, message))
+    )
+  );
+}
+
+function renderEditingQueue() {
+  const queue = editingItems();
+  if (!queue.length) {
+    return el("div", { class: "editingQueue emptyBox" }, "編集待ちの文はありません。");
+  }
+  return el("div", { class: "editingQueue" },
+    el("div", { class: "sectionHead compact" },
+      el("div", {},
+        el("p", { class: "label" }, "Editing Queue"),
+        el("h3", {}, `編集待ち ${queue.length} 文`)
+      )
+    ),
+    el("div", { class: "savedList" },
+      ...queue.map((item, index) => el("div", { class: "savedRow editing" },
+        el("span", { class: "itemNo" }, String(index + 1).padStart(2, "0")),
+        el("span", { class: "itemMain" },
+          el("strong", {}, item.sentence || item.id),
+          el("small", {}, `${item.source || ""}${item.editNote ? ` / ${item.editNote}` : ""}`)
+        ),
+        el("button", {
+          class: "tiny ghost",
+          type: "button",
+          onclick: () => loadEditorItem(item),
+        }, "編集")
+      ))
     )
   );
 }
@@ -1025,7 +1090,7 @@ function validateChunks(chunks, label, errors) {
 function addCurrentItemToDataset() {
   const item = cloneItem(editorItem());
   const validation = validateEditorItem(item);
-  if (validation.errors.length) {
+  if (item.status !== "editing" && validation.errors.length) {
     alert(`教材に追加できません:\n${validation.errors.join("\n")}`);
     return;
   }
@@ -1038,6 +1103,7 @@ function addCurrentItemToDataset() {
 function loadEditorItem(item) {
   state.editor.source = item.source || "JSON読込";
   state.editor.itemId = item.id || `custom_${Date.now()}`;
+  state.editor.status = item.status || "ready";
   state.editor.sentence = item.sentence || "";
   state.editor.chunks = cloneItem(item).root?.chunks || [];
   state.editor.selectedChunk = state.editor.chunks.length ? 0 : -1;
@@ -1057,7 +1123,7 @@ function slugify(value) {
 }
 
 function editorItem() {
-  return {
+  const item = {
     id: state.editor.itemId || `custom_${Date.now()}`,
     source: state.editor.source || "手入力",
     sentence: state.editor.sentence,
@@ -1065,6 +1131,11 @@ function editorItem() {
       chunks: state.editor.chunks,
     },
   };
+  if (state.editor.status === "editing") {
+    item.status = "editing";
+    item.editNote = "編集待ち: chunk/role/translationを確定してください。";
+  }
+  return item;
 }
 
 function editorDataset() {

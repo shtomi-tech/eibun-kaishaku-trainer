@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "node tools/build-netlify.mjs",
+    "import:eiken2": "node tools/import-eiken2-q1.mjs",
     "deploy": "netlify deploy --prod"
   }
 }

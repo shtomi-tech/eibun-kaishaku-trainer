@@ -59,6 +59,16 @@ button:hover {
   background: #000;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: .72;
+}
+
+button:disabled:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
 button.ghost,
 button.tabBtn {
   background: transparent;
@@ -230,7 +240,7 @@ h3 { font-size: 20px; }
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid var(--ink);
   border-left: 1px solid var(--ink);
   margin-bottom: 16px;
@@ -435,7 +445,8 @@ h3 { font-size: 20px; }
 .emptyBox,
 .mistakeBox,
 .validationBox,
-.savedItems {
+.savedItems,
+.editingQueue {
   border-top: 2px solid var(--ink);
   margin-top: 18px;
   padding-top: 16px;
@@ -539,6 +550,21 @@ h3 { font-size: 20px; }
 
 .itemRow.review {
   border-color: var(--clay);
+}
+
+.itemRow.editing {
+  border-style: dashed;
+  background: var(--parchment);
+}
+
+.itemRow.editing:hover {
+  background: var(--parchment);
+  color: var(--ink);
+}
+
+.itemRow.editing:hover small,
+.itemRow.editing:hover .itemStatus {
+  color: var(--muted);
 }
 
 .itemNo {
@@ -646,6 +672,10 @@ h3 { font-size: 20px; }
   border: 1px solid var(--ink);
   padding: 10px;
   background: var(--parchment);
+}
+
+.savedRow.editing {
+  border-style: dashed;
 }
 
 .jsonArea {
