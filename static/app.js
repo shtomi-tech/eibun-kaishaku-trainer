@@ -870,13 +870,18 @@ function selectedChunk() {
 }
 
 function mergeSelectedWithNext() {
-  const idx = state.editor.selectedChunk;
+  mergeChunkWithNext(state.editor.selectedChunk);
+}
+
+function mergeChunkWithNext(index) {
+  const idx = Number(index);
   if (idx < 0 || idx >= state.editor.chunks.length - 1) return;
   const current = state.editor.chunks[idx];
   const next = state.editor.chunks[idx + 1];
   current.text = `${current.text} ${next.text}`.replace(/\s+([.,!?;:])/g, "$1");
   if (!current.translation && next.translation) current.translation = next.translation;
   state.editor.chunks.splice(idx + 1, 1);
+  state.editor.selectedChunk = idx;
   renderEditor();
 }
 
@@ -949,6 +954,12 @@ function renderEditableChunk(chunk, index) {
         onclick: () => { state.editor.selectedChunk = index; renderEditor(); },
       }, `${String(index + 1).padStart(2, "0")} ${chunk.text || "(empty)"}`),
       el("div", { class: "childActions" },
+        el("button", {
+          class: "tiny ghost",
+          type: "button",
+          disabled: index < state.editor.chunks.length - 1 ? null : "disabled",
+          onclick: () => mergeChunkWithNext(index),
+        }, "次と結合"),
         el("button", { class: "tiny ghost", type: "button", onclick: () => addChunkAfter(index) }, "後ろに追加"),
         el("button", { class: "tiny ghost", type: "button", onclick: () => deleteChunk(index) }, "削除")
       )
