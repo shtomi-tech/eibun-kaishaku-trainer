@@ -373,6 +373,41 @@ h3 { font-size: 20px; }
   color: var(--parchment);
 }
 
+.listFilters {
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+}
+
+.levelButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.levelTag {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 6px;
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.queueGroup + .queueGroup {
+  margin-top: 14px;
+}
+
+.queueGroupHead {
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
 .progressBar {
   height: 12px;
   border: 1px solid var(--ink);
@@ -842,6 +877,35 @@ h3 { font-size: 20px; }
   display: grid;
   gap: 10px;
   margin-top: 16px;
+}
+
+.chunkReference {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: grid;
+  gap: 4px;
+  background: var(--ink);
+  color: var(--parchment);
+  border: 1px solid var(--ink);
+  padding: 8px 12px;
+}
+
+.chunkReference .label {
+  color: var(--parchment);
+  opacity: 0.7;
+}
+
+.refSentence {
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.refHighlight {
+  background: var(--parchment);
+  color: var(--ink);
+  padding: 0 2px;
 }
 
 .chunkHeader {

@@ -1,14 +1,17 @@
 {
   "meta": {
     "id": "eiken2-2026-1",
-    "label": "英検2級 2026年度第1回",
-    "source": "英検2級 2026年度第1回 大問1",
+    "label": "英検2級・準2級 2026年度第1回",
+    "source": "英検2級・準2級 2026年度第1回 大問1",
     "version": 1,
-    "note": "英検2級 大問1の保存済み問題を完全文化して文単位で取り込み。status=editing は編集待ち。",
-    "importedFrom": "英語/英検2級_大問1アプリ/data/questions_2026-1.json",
-    "importedAt": "2026-06-30T13:45:41.088Z",
-    "lastEditedFrom": "C:/Users/shtom/Downloads/custom-reading-set (2).json",
-    "lastEditedAt": "2026-07-01T01:19:55.355Z"
+    "note": "英検2級・準2級 大問1の保存済み問題を完全文化して文単位で取り込み。level で級を区別、status=editing は編集待ち。",
+    "importedFrom": [
+      "英語/英検2級_大問1アプリ/data/questions_2026-1.json",
+      "英語/英検2級_大問1アプリ/data/questions_p2_2026-1.json"
+    ],
+    "importedAt": "2026-07-01T02:41:31.767Z",
+    "lastEditedFrom": "C:/Users/shtom/Downloads/custom-reading-set (3).json",
+    "lastEditedAt": "2026-07-01T01:33:10.499Z"
   },
   "items": [
     {
@@ -44,7 +47,8 @@
           }
         ]
       },
-      "status": "ready"
+      "status": "ready",
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q1_s2",
@@ -78,7 +82,8 @@
             "translation": "赤いドレスを"
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q2_s1",
@@ -113,7 +118,8 @@
           }
         ]
       },
-      "status": "ready"
+      "status": "ready",
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q2_s2",
@@ -147,7 +153,8 @@
             "translation": "日本から離れた国々について"
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q3_s1",
@@ -182,7 +189,8 @@
           }
         ]
       },
-      "status": "ready"
+      "status": "ready",
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q3_s2",
@@ -206,7 +214,8 @@
             "translation": "そんなに早くその言語を習得したことに"
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q4_s1",
@@ -230,7 +239,8 @@
             "translation": "よい"
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q4_s2",
@@ -264,24 +274,8 @@
             "translation": "心配している時に"
           }
         ]
-      }
-    },
-    {
-      "id": "eiken2-2026-1_q4_s3",
-      "status": "editing",
-      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 3",
-      "sentence": "B: Do I?",
-      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
-      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
-      "root": {
-        "chunks": [
-          {
-            "role": "M",
-            "text": "B: Do I?",
-            "translation": ""
-          }
-        ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q4_s4",
@@ -298,24 +292,8 @@
             "translation": ""
           }
         ]
-      }
-    },
-    {
-      "id": "eiken2-2026-1_q4_s5",
-      "status": "editing",
-      "source": "英検2級 2026年度第1回 大問1 Q4 / sentence 5",
-      "sentence": "I'm fine.",
-      "translation": "A: 大丈夫？ 心配があると黙りこむ傾向があるよ。 B: そう？ 自分では気づかなかった。大丈夫、今日は話すことが少ないだけ。",
-      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
-      "root": {
-        "chunks": [
-          {
-            "role": "M",
-            "text": "I'm fine.",
-            "translation": ""
-          }
-        ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q4_s6",
@@ -332,7 +310,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q5_s1",
@@ -349,7 +328,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q5_s2",
@@ -379,7 +359,8 @@
           }
         ]
       },
-      "status": "ready"
+      "status": "ready",
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q6_s1",
@@ -396,7 +377,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q6_s2",
@@ -413,7 +395,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q7_s1",
@@ -430,7 +413,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q7_s2",
@@ -447,7 +431,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q8_s1",
@@ -464,7 +449,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q8_s2",
@@ -481,7 +467,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q9_s1",
@@ -498,7 +485,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q9_s2",
@@ -515,7 +503,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q10_s1",
@@ -532,7 +521,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q10_s2",
@@ -586,7 +576,8 @@
           }
         ]
       },
-      "status": "ready"
+      "status": "ready",
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q11_s1",
@@ -603,7 +594,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q11_s2",
@@ -620,7 +612,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q12_s1",
@@ -637,7 +630,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q12_s2",
@@ -654,7 +648,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q13_s1",
@@ -671,7 +666,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q14_s1",
@@ -688,7 +684,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q14_s2",
@@ -705,7 +702,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q15_s1",
@@ -722,7 +720,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q15_s2",
@@ -739,7 +738,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q15_s3",
@@ -756,7 +756,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q15_s4",
@@ -773,7 +774,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q16_s1",
@@ -790,7 +792,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q17_s1",
@@ -807,7 +810,8 @@
             "translation": ""
           }
         ]
-      }
+      },
+      "level": "2級"
     },
     {
       "id": "eiken2-2026-1_q17_s2",
@@ -821,6 +825,618 @@
           {
             "role": "M",
             "text": "It was a very difficult decision to make.",
+            "translation": ""
+          }
+        ]
+      },
+      "level": "2級"
+    },
+    {
+      "id": "eiken-p2-2026-1_q1_s1",
+      "source": "英検準2級 2026年度第1回 大問1 Q1 / sentence 1",
+      "level": "準2級",
+      "sentence": "A: Michael, this meal is absolutely delicious!",
+      "root": {
+        "chunks": [
+          {
+            "text": "Michael,",
+            "role": "M",
+            "translation": "マイケル"
+          },
+          {
+            "text": "this meal",
+            "role": "S",
+            "translation": "この料理は"
+          },
+          {
+            "text": "is",
+            "role": "V",
+            "translation": "です"
+          },
+          {
+            "text": "absolutely",
+            "role": "M",
+            "translation": "とても"
+          },
+          {
+            "text": "delicious!",
+            "role": "C",
+            "translation": "美味しい"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q1_s2",
+      "source": "英検準2級 2026年度第1回 大問1 Q1 / sentence 2",
+      "level": "準2級",
+      "sentence": "It is the best pasta that I have ever eaten.",
+      "root": {
+        "chunks": [
+          {
+            "text": "It",
+            "role": "S",
+            "translation": "それは"
+          },
+          {
+            "text": "is",
+            "role": "V",
+            "translation": "です"
+          },
+          {
+            "text": "the best pasta that I have ever eaten.",
+            "role": "M",
+            "translation": "これまで食べたなかで一番のパスタだ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q2_s1",
+      "source": "英検準2級 2026年度第1回 大問1 Q2 / sentence 1",
+      "level": "準2級",
+      "sentence": "Dennis was recently transferred to his company’s New York office.",
+      "root": {
+        "chunks": [
+          {
+            "text": "Dennis",
+            "role": "S",
+            "translation": "デニスは"
+          },
+          {
+            "text": "was recently transferred",
+            "role": "V",
+            "translation": "最近引っ越しさせられた"
+          },
+          {
+            "text": "to his company s New York office.",
+            "role": "M",
+            "translation": "彼の会社のニューヨークオフィスに"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q2_s2",
+      "source": "英検準2級 2026年度第1回 大問1 Q2 / sentence 2",
+      "level": "準2級",
+      "sentence": "He likes his new apartment and is slowly finding out about the city.",
+      "root": {
+        "chunks": [
+          {
+            "text": "He",
+            "role": "S",
+            "translation": "彼は"
+          },
+          {
+            "text": "likes",
+            "role": "V",
+            "translation": "好きだ"
+          },
+          {
+            "text": "his new apartment",
+            "role": "O",
+            "translation": "彼の新しいアパートを"
+          },
+          {
+            "text": "and",
+            "role": "接続",
+            "translation": "と"
+          },
+          {
+            "text": "is slowly finding out ",
+            "role": "V",
+            "translation": "ゆっくり理解した"
+          },
+          {
+            "text": "about the city.",
+            "role": "M",
+            "translation": "その都市について"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q3_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q3 / sentence 1",
+      "sentence": "Today, Mr. Carter taught his students about the dangers of smoking.",
+      "translation": "今日、カーター先生は生徒たちに喫煙の危険性について教えた。生徒たちは喫煙が引き起こす健康問題について学んだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Today, Mr. Carter taught his students about the dangers of smoking.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q3_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q3 / sentence 2",
+      "sentence": "The students learned about the health problems it can cause.",
+      "translation": "今日、カーター先生は生徒たちに喫煙の危険性について教えた。生徒たちは喫煙が引き起こす健康問題について学んだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The students learned about the health problems it can cause.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q4_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q4 / sentence 1",
+      "sentence": "A: Why did you choose that hotel for our vacation?",
+      "translation": "A: どうして休暇のホテルにそこを選んだの？ B: 評判がよくて、他の選択肢と比べて値段が手ごろに思えたんだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "A: Why did you choose that hotel for our vacation?",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q4_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q4 / sentence 2",
+      "sentence": "B: It had good reviews, and the price seemed reasonable compared to other options.",
+      "translation": "A: どうして休暇のホテルにそこを選んだの？ B: 評判がよくて、他の選択肢と比べて値段が手ごろに思えたんだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "B: It had good reviews, and the price seemed reasonable compared to other options.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q5_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q5 / sentence 1",
+      "sentence": "At the start of the lesson, Mr. Harris made an announcement.",
+      "translation": "授業の始めに、ハリス先生は発表をした。彼は、これから数週間、教育実習生が授業を担当するとクラスに伝えた。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "At the start of the lesson, Mr. Harris made an announcement.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q5_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q5 / sentence 2",
+      "sentence": "He told the class that a student teacher would be teaching his lessons for the next few weeks.",
+      "translation": "授業の始めに、ハリス先生は発表をした。彼は、これから数週間、教育実習生が授業を担当するとクラスに伝えた。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "He told the class that a student teacher would be teaching his lessons for the next few weeks.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q6_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q6 / sentence 1",
+      "sentence": "The mayor has asked several local artists to create statues that will be put in the city’s parks.",
+      "translation": "市長は地元の芸術家数人に、市内の公園に置く像を作るよう依頼した。芸術家たちは金属か石を使ってよいと伝えられている。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The mayor has asked several local artists to create statues that will be put in the city’s parks.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q6_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q6 / sentence 2",
+      "sentence": "The artists have been told that they can use either metal or stone.",
+      "translation": "市長は地元の芸術家数人に、市内の公園に置く像を作るよう依頼した。芸術家たちは金属か石を使ってよいと伝えられている。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "The artists have been told that they can use either metal or stone.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q7_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q7 / sentence 1",
+      "sentence": "When Adam buys expensive items, he always keeps the receipt in a safe place.",
+      "translation": "アダムは高価な品物を買うと、いつもレシートを安全な場所に保管する。そうすれば、問題があったときに返品できる。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "When Adam buys expensive items, he always keeps the receipt in a safe place.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q7_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q7 / sentence 2",
+      "sentence": "That way, he can return an item if it has a problem.",
+      "translation": "アダムは高価な品物を買うと、いつもレシートを安全な場所に保管する。そうすれば、問題があったときに返品できる。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "That way, he can return an item if it has a problem.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q8_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q8 / sentence 1",
+      "sentence": "People can trust their friends to support them during difficult times and help them find solutions.",
+      "translation": "人は困難な時に友人を信頼して支えてもらい、解決策を見つける助けを得ることができる。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "People can trust their friends to support them during difficult times and help them find solutions.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q9_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q9 / sentence 1",
+      "sentence": "A: How many points did you score in the math test?",
+      "translation": "A: 数学のテストで何点取ったの？ B: 100点中50点だけ。すごく悪かった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "A: How many points did you score in the math test?",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q9_s3",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q9 / sentence 3",
+      "sentence": "I did really badly.",
+      "translation": "A: 数学のテストで何点取ったの？ B: 100点中50点だけ。すごく悪かった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "I did really badly.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q10_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q10 / sentence 1",
+      "sentence": "After running ten kilometers, Evan’s legs started to ache.",
+      "translation": "10キロ走った後、エバンの脚は痛み始めた。彼は座って休み、脚のストレッチをした。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "After running ten kilometers, Evan’s legs started to ache.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q10_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q10 / sentence 2",
+      "sentence": "He sat down to rest and did some leg stretching exercises.",
+      "translation": "10キロ走った後、エバンの脚は痛み始めた。彼は座って休み、脚のストレッチをした。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "He sat down to rest and did some leg stretching exercises.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q11_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q11 / sentence 1",
+      "sentence": "Almost all the pets in the shelter found homes, except for one dog that was still waiting for a family.",
+      "translation": "保護施設のほとんどすべてのペットは引き取り先が見つかったが、家族をまだ待っている犬が1匹だけ例外だった。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Almost all the pets in the shelter found homes, except for one dog that was still waiting for a family.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q12_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q12 / sentence 1",
+      "sentence": "A: Look out!",
+      "translation": "A: 気をつけて！顔の近くにハチがいるよ！ B: あ、見えてなかった。教えてくれてありがとう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "A: Look out!",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q12_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q12 / sentence 2",
+      "sentence": "There’s a bee near your face!",
+      "translation": "A: 気をつけて！顔の近くにハチがいるよ！ B: あ、見えてなかった。教えてくれてありがとう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "There’s a bee near your face!",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q12_s3",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q12 / sentence 3",
+      "sentence": "B: Oh, I didn’t see it.",
+      "translation": "A: 気をつけて！顔の近くにハチがいるよ！ B: あ、見えてなかった。教えてくれてありがとう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "B: Oh, I didn’t see it.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q12_s4",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q12 / sentence 4",
+      "sentence": "Thanks for letting me know.",
+      "translation": "A: 気をつけて！顔の近くにハチがいるよ！ B: あ、見えてなかった。教えてくれてありがとう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Thanks for letting me know.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q13_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q13 / sentence 1",
+      "sentence": "A: Dad, can I have a new smartphone for my birthday this year?",
+      "translation": "A: お父さん、今年の誕生日に新しいスマートフォンをもらえる？ B: だめだ、それは問題外だよ、メーガン。誕生日は来月だし、先月新しいものを買ったばかりだろう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "A: Dad, can I have a new smartphone for my birthday this year?",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q13_s3",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q13 / sentence 3",
+      "sentence": "Your birthday is next month, and you just got a new one last month.",
+      "translation": "A: お父さん、今年の誕生日に新しいスマートフォンをもらえる？ B: だめだ、それは問題外だよ、メーガン。誕生日は来月だし、先月新しいものを買ったばかりだろう。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Your birthday is next month, and you just got a new one last month.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q14_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q14 / sentence 1",
+      "sentence": "A: Have you decided which club to join, Chris?",
+      "translation": "A: どのクラブに入るか決めた、クリス？ B: いや。決められないんだ。全部おもしろそうなんだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "A: Have you decided which club to join, Chris?",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q14_s3",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q14 / sentence 3",
+      "sentence": "I can’t make up my mind.",
+      "translation": "A: どのクラブに入るか決めた、クリス？ B: いや。決められないんだ。全部おもしろそうなんだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "I can’t make up my mind.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q14_s4",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q14 / sentence 4",
+      "sentence": "They all seem so interesting.",
+      "translation": "A: どのクラブに入るか決めた、クリス？ B: いや。決められないんだ。全部おもしろそうなんだ。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "They all seem so interesting.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q15_s1",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q15 / sentence 1",
+      "sentence": "Before buying a new smartphone, you should take a look at several different ones.",
+      "translation": "新しいスマートフォンを買う前に、いくつか違うものを見てみるべきだ。そうすれば自分に合うものを見つけられる。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "Before buying a new smartphone, you should take a look at several different ones.",
+            "translation": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "eiken-p2-2026-1_q15_s2",
+      "status": "editing",
+      "level": "準2級",
+      "source": "英検準2級 2026年度第1回 大問1 Q15 / sentence 2",
+      "sentence": "That way, you can find one that is right for you.",
+      "translation": "新しいスマートフォンを買う前に、いくつか違うものを見てみるべきだ。そうすれば自分に合うものを見つけられる。",
+      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
+      "root": {
+        "chunks": [
+          {
+            "role": "M",
+            "text": "That way, you can find one that is right for you.",
             "translation": ""
           }
         ]

@@ -2,7 +2,7 @@
   "datasets": [
     {
       "id": "eiken2-2026-1",
-      "label": "英検2級 2026年度第1回",
+      "label": "英検2級・準2級 2026年度第1回",
       "url": "data/eiken2-2026-1.json"
     }
   ]

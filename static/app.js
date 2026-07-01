@@ -9,6 +9,7 @@ const SENTENCE_PATTERNS = [
   { id: "SVOC", label: "第5文型 SVOC" },
   { id: "special", label: "その他・特殊構文" },
 ];
+const LEVEL_ORDER = ["2級", "準2級"];
 const STORE_PREFIX = "reading_trainer_v1";
 const DEFAULT_STUDENT = "default";
 
@@ -20,6 +21,7 @@ const state = {
   progress: null,
   mode: "player",
   playerFilter: "all",
+  playerLevel: "all",
   session: null,
   interpretation: null,
   editor: defaultEditorState(),
@@ -61,6 +63,7 @@ function defaultEditorState() {
     datasetId: "custom-reading-set",
     datasetLabel: "自作 英文解釈",
     source: "手入力",
+    level: "2級",
     itemId: `custom_${new Date().toISOString().slice(0, 10).replaceAll("-", "")}`,
     status: "ready",
     sentence: "",
@@ -467,6 +470,29 @@ function findItem(itemId) {
   return (state.dataset?.items || []).find((item) => item.id === itemId);
 }
 
+function itemLevel(item) {
+  if (item?.level) return item.level;
+  if (String(item?.id || "").startsWith("eiken-p2") || /準2級/.test(item?.source || "")) return "準2級";
+  return "2級";
+}
+
+function levelLabel(level) {
+  return level === "all" ? "すべての級" : `英検${level}`;
+}
+
+function datasetLevels() {
+  const present = new Set((state.dataset?.items || []).map(itemLevel));
+  const ordered = LEVEL_ORDER.filter((level) => present.has(level));
+  const extras = [...present].filter((level) => !LEVEL_ORDER.includes(level));
+  return ordered.concat(extras);
+}
+
+function levelItems() {
+  const items = state.dataset?.items || [];
+  if (state.playerLevel === "all") return items;
+  return items.filter((item) => itemLevel(item) === state.playerLevel);
+}
+
 function isReadyItem(item) {
   return item?.status !== "editing";
 }
@@ -633,7 +659,7 @@ function filterLabel(filter) {
 }
 
 function renderSummary() {
-  const items = state.dataset?.items || [];
+  const items = levelItems();
   const ready = items.filter(isReadyItem);
   const editing = items.filter((item) => !isReadyItem(item)).length;
   const interpreted = ready.filter((item) => isInterpretationCleared(item.id)).length;
@@ -1127,15 +1153,18 @@ function revealCurrent(auto) {
 }
 
 function renderItemList() {
-  const items = state.dataset?.items || [];
+  const items = levelItems();
   const visibleItems = filterItems(items);
   return el("section", { class: "panel" },
     el("div", { class: "sectionHead" },
       el("div", {},
         el("p", { class: "label" }, "Sentences"),
-        el("h2", {}, `文リスト: ${filterLabel(state.playerFilter)}`)
+        el("h2", {}, `文リスト: ${levelLabel(state.playerLevel)} / ${filterLabel(state.playerFilter)}`)
       ),
-      renderFilterButtons(items)
+      el("div", { class: "listFilters" },
+        renderLevelButtons(),
+        renderFilterButtons(items)
+      )
     ),
     visibleItems.length ? el("div", { class: "itemList" },
       ...visibleItems.map((item) => {
@@ -1156,7 +1185,10 @@ function renderItemList() {
         },
           el("span", { class: "itemNo" }, String(originalIndex + 1).padStart(2, "0")),
           el("span", { class: "itemMain" },
-            el("strong", {}, item.sentence),
+            el("strong", {},
+              el("span", { class: "levelTag" }, itemLevel(item)),
+              item.sentence
+            ),
             el("small", {}, ready
               ? `${item.source || ""} / 解釈 ${interpretation.attempts || 0}${interpretation.lastAt ? ` / 最終 ${formatDateTime(interpretation.lastAt)}` : ""} / 確認 ${att.attempts || 0} / 誤答 ${att.wrong || 0}`
               : `${item.source || ""} / ${item.editNote || "編集待ち"}`)
@@ -1186,6 +1218,26 @@ function itemStatusLabel(item) {
   if (isInterpretationCleared(item.id)) return "DONE";
   if (isCleared(item.id)) return "CHECK";
   return "OPEN";
+}
+
+function renderLevelButtons() {
+  const levels = datasetLevels();
+  if (levels.length < 2) return null;
+  const all = state.dataset?.items || [];
+  const options = ["all", ...levels];
+  return el("div", { class: "levelButtons", role: "group", "aria-label": "級で絞り込み" },
+    ...options.map((level) => {
+      const count = level === "all" ? all.length : all.filter((item) => itemLevel(item) === level).length;
+      return el("button", {
+        type: "button",
+        class: `filterBtn levelBtn ${state.playerLevel === level ? "active" : ""}`,
+        onclick: () => {
+          state.playerLevel = level;
+          render();
+        },
+      }, `${levelLabel(level)} ${count}`);
+    })
+  );
 }
 
 function renderFilterButtons(items) {
@@ -1275,6 +1327,14 @@ function renderEditorInputs() {
       value: state.editor.source,
       oninput: (e) => { state.editor.source = e.target.value; updateJsonPreviewOnly(); },
     })),
+    field("級", el("select", {
+      onchange: (e) => { state.editor.level = e.target.value; updateJsonPreviewOnly(); },
+    },
+      ...LEVEL_ORDER.map((level) => el("option", {
+        value: level,
+        selected: state.editor.level === level ? "selected" : null,
+      }, `英検${level}`))
+    )),
     field("状態", el("select", {
       onchange: (e) => { state.editor.status = e.target.value; updateJsonPreviewOnly(); },
     },
@@ -1382,6 +1442,7 @@ function renderEditorChunks() {
     return el("div", { class: "emptyBox chunkEmpty" }, "chunkがありません。");
   }
   return el("div", { class: "editorChunks" },
+    renderChunkReference(),
     el("div", { class: "chunkHeader" },
       el("p", { class: "label" }, "Chunks"),
       el("div", { class: "roleLegend" },
@@ -1390,6 +1451,47 @@ function renderEditorChunks() {
     ),
     ...state.editor.chunks.map((chunk, index) => renderEditableChunk(chunk, index))
   );
+}
+
+function renderChunkReference() {
+  const sentence = state.editor.sentence || "";
+  const range = selectedChunkRange(sentence);
+  let sentenceNode;
+  if (range) {
+    sentenceNode = el("p", { class: "refSentence" },
+      sentence.slice(0, range.start),
+      el("mark", { class: "refHighlight" }, sentence.slice(range.start, range.end)),
+      sentence.slice(range.end)
+    );
+  } else {
+    sentenceNode = el("p", { class: "refSentence" }, sentence || "（英文が未入力です）");
+  }
+  return el("div", { class: "chunkReference" },
+    el("p", { class: "label" }, "原文（分割前）"),
+    sentenceNode
+  );
+}
+
+// 選択中chunkが原文のどこかを、chunkの並び順どおりに前から辿って特定する。
+// 同じ単語が複数回出てくる文でも、正しい出現位置をハイライトできる。
+function selectedChunkRange(sentence) {
+  const selectedIndex = state.editor.selectedChunk;
+  if (selectedIndex < 0 || !sentence) return null;
+  let cursor = 0;
+  for (let i = 0; i <= selectedIndex && i < state.editor.chunks.length; i += 1) {
+    const text = (state.editor.chunks[i]?.text || "").trim();
+    if (!text) continue;
+    const at = sentence.indexOf(text, cursor);
+    if (at < 0) {
+      // 前から辿れなくなった場合は最初の一致にフォールバック
+      const fallback = i === selectedIndex ? sentence.indexOf(text) : -1;
+      if (fallback < 0) return null;
+      return { start: fallback, end: fallback + text.length };
+    }
+    if (i === selectedIndex) return { start: at, end: at + text.length };
+    cursor = at + text.length;
+  }
+  return null;
 }
 
 function renderEditableChunk(chunk, index) {
@@ -1514,6 +1616,8 @@ function renderEditingQueue() {
   if (!queue.length) {
     return el("aside", { class: "editingQueue emptyBox" }, "編集待ちの文はありません。");
   }
+  const levels = datasetLevels().filter((level) => queue.some((item) => itemLevel(item) === level));
+  const groups = levels.length ? levels : [itemLevel(queue[0])];
   return el("aside", { class: "editingQueue" },
     el("div", { class: "sectionHead compact" },
       el("div", {},
@@ -1521,26 +1625,35 @@ function renderEditingQueue() {
         el("h3", {}, `編集待ち ${queue.length} 文`)
       )
     ),
-    el("div", { class: "savedList" },
-      ...queue.map((item, index) => el("div", { class: "savedRow editing" },
-        el("span", { class: "itemNo" }, String(index + 1).padStart(2, "0")),
-        el("span", { class: "itemMain" },
-          el("strong", {}, item.sentence || item.id),
-          el("small", {}, `${item.source || ""}${item.editNote ? ` / ${item.editNote}` : ""}`)
-        ),
-        el("div", { class: "childActions" },
-          el("button", {
-            class: "tiny ghost",
-            type: "button",
-            onclick: () => loadEditorItem(item),
-          }, state.editor.itemId === item.id ? "編集中" : "開く"),
-          el("button", {
-            class: "tiny danger",
-            type: "button",
-            onclick: () => removeEditingItem(item),
-          }, "削除")
-        )
-      ))
+    ...groups.map((level) => {
+      const rows = queue.filter((item) => itemLevel(item) === level);
+      if (!rows.length) return null;
+      return el("div", { class: "queueGroup" },
+        el("p", { class: "label queueGroupHead" }, `${levelLabel(level)} ${rows.length} 文`),
+        el("div", { class: "savedList" }, ...rows.map((item, index) => renderEditingRow(item, index)))
+      );
+    })
+  );
+}
+
+function renderEditingRow(item, index) {
+  return el("div", { class: "savedRow editing" },
+    el("span", { class: "itemNo" }, String(index + 1).padStart(2, "0")),
+    el("span", { class: "itemMain" },
+      el("strong", {}, item.sentence || item.id),
+      el("small", {}, `${item.source || ""}${item.editNote ? ` / ${item.editNote}` : ""}`)
+    ),
+    el("div", { class: "childActions" },
+      el("button", {
+        class: "tiny ghost",
+        type: "button",
+        onclick: () => loadEditorItem(item),
+      }, state.editor.itemId === item.id ? "編集中" : "開く"),
+      el("button", {
+        class: "tiny danger",
+        type: "button",
+        onclick: () => removeEditingItem(item),
+      }, "削除")
     )
   );
 }
@@ -1648,6 +1761,7 @@ function removeEditingItem(item) {
 
 function loadEditorItem(item) {
   state.editor.source = item.source || "JSON読込";
+  state.editor.level = itemLevel(item);
   state.editor.itemId = item.id || `custom_${Date.now()}`;
   state.editor.status = item.status || "ready";
   state.editor.sentence = item.sentence || "";
@@ -1673,6 +1787,7 @@ function editorItem() {
   const item = {
     id: state.editor.itemId || `custom_${Date.now()}`,
     source: state.editor.source || "手入力",
+    level: state.editor.level || "2級",
     sentence: state.editor.sentence,
     root: {
       chunks: state.editor.chunks,
@@ -1736,6 +1851,7 @@ function importJsonFromTextarea() {
       datasetId: parsed.meta?.id || state.editor.datasetId,
       datasetLabel: parsed.meta?.label || state.editor.datasetLabel,
       source: item.source || "JSON読込",
+      level: itemLevel(item),
       itemId: item.id || `custom_${Date.now()}`,
       status: item.status || "ready",
       sentence: item.sentence || "",
