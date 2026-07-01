@@ -386,6 +386,163 @@ h3 { font-size: 20px; }
   background: var(--ink);
 }
 
+.interpretationPanel {
+  border-width: 2px;
+}
+
+.stageRail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+  margin: 16px 0;
+}
+
+.stageCell {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 54px;
+  border-right: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper);
+  padding: 10px;
+}
+
+.stageCell span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.stageCell strong {
+  font-size: 14px;
+}
+
+.stageCell.active {
+  background: var(--ink);
+  color: var(--parchment);
+}
+
+.stageCell.active span {
+  border-color: var(--parchment);
+}
+
+.stageCell.done {
+  background: var(--parchment);
+}
+
+.interpretStage {
+  border-top: 2px solid var(--ink);
+  padding-top: 16px;
+}
+
+.interpretStage h3 {
+  margin-top: 2px;
+}
+
+.previewStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.previewStrip span {
+  border: 1px solid var(--ink);
+  background: var(--parchment);
+  padding: 6px 9px;
+  overflow-wrap: anywhere;
+}
+
+.studentChunkList,
+.translationRows,
+.compareTable {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.studentChunkRow {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) minmax(120px, 160px);
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--ink);
+  background: var(--parchment);
+  padding: 10px;
+}
+
+.studentChunkRow strong,
+.translationRow strong,
+.compareSide strong {
+  overflow-wrap: anywhere;
+}
+
+.translationRow {
+  display: grid;
+  grid-template-columns: auto minmax(160px, .8fr) minmax(220px, 1.2fr);
+  gap: 10px;
+  align-items: start;
+  border: 1px solid var(--ink);
+  background: var(--parchment);
+  padding: 10px;
+}
+
+.translationRow textarea {
+  min-height: 70px;
+}
+
+.compareStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--ink);
+  margin: 12px 0;
+}
+
+.compareRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--ink);
+}
+
+.compareRow.diff {
+  border-color: var(--clay);
+}
+
+.compareSide {
+  min-width: 0;
+  padding: 12px;
+}
+
+.compareSide + .compareSide {
+  border-left: 1px solid var(--ink);
+}
+
+.compareSide p {
+  margin: 8px 0 0;
+}
+
+.compareSide.teacher {
+  background: var(--parchment);
+}
+
+.teacherChildren {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  border-left: 2px solid var(--ink);
+  padding-left: 10px;
+  font-size: 13px;
+}
+
 .chunkLayer {
   display: grid;
   gap: 10px;
@@ -778,8 +935,18 @@ h3 { font-size: 20px; }
   .chunkForm,
   .chunkTop,
   .childRow,
-  .savedRow {
+  .savedRow,
+  .stageRail,
+  .studentChunkRow,
+  .translationRow,
+  .compareStats,
+  .compareRow {
     grid-template-columns: 1fr;
+  }
+
+  .compareSide + .compareSide {
+    border-left: 0;
+    border-top: 1px solid var(--ink);
   }
 
   .stats {

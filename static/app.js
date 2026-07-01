@@ -13,6 +13,7 @@ const state = {
   mode: "player",
   playerFilter: "all",
   session: null,
+  interpretation: null,
   editor: defaultEditorState(),
 };
 
@@ -41,6 +42,8 @@ function defaultProgress() {
     itemAttempts: {},
     mistakes: {},
     roleStats: {},
+    interpretationClearedItemIds: [],
+    interpretationAttempts: {},
     lastItemId: "",
   };
 }
@@ -106,7 +109,9 @@ function normalizeProgress(progress) {
   const base = { ...defaultProgress(), ...(progress || {}) };
   if (!Array.isArray(base.clearedItemIds)) base.clearedItemIds = [];
   if (!Array.isArray(base.needsReviewItemIds)) base.needsReviewItemIds = [];
+  if (!Array.isArray(base.interpretationClearedItemIds)) base.interpretationClearedItemIds = [];
   if (!base.itemAttempts || typeof base.itemAttempts !== "object") base.itemAttempts = {};
+  if (!base.interpretationAttempts || typeof base.interpretationAttempts !== "object") base.interpretationAttempts = {};
   if (!base.mistakes || typeof base.mistakes !== "object") base.mistakes = {};
   if (!base.roleStats || typeof base.roleStats !== "object") base.roleStats = {};
   for (const role of ROLES) {
@@ -173,6 +178,10 @@ function isCleared(itemId) {
   return state.progress.clearedItemIds.includes(itemId);
 }
 
+function isInterpretationCleared(itemId) {
+  return state.progress.interpretationClearedItemIds.includes(itemId);
+}
+
 function isReviewNeeded(itemId) {
   return state.progress.needsReviewItemIds.includes(itemId);
 }
@@ -183,6 +192,23 @@ function addReviewItem(itemId) {
 
 function removeReviewItem(itemId) {
   state.progress.needsReviewItemIds = state.progress.needsReviewItemIds.filter((id) => id !== itemId);
+}
+
+function interpretationAttempt(itemId) {
+  if (!state.progress.interpretationAttempts[itemId]) {
+    state.progress.interpretationAttempts[itemId] = { attempts: 0, lastAt: "", lastScore: null };
+  }
+  return state.progress.interpretationAttempts[itemId];
+}
+
+function markInterpretationComplete(itemId, score) {
+  if (!isInterpretationCleared(itemId)) state.progress.interpretationClearedItemIds.push(itemId);
+  state.progress.lastItemId = itemId;
+  const att = interpretationAttempt(itemId);
+  att.attempts += 1;
+  att.lastAt = new Date().toISOString();
+  att.lastScore = score;
+  saveProgress();
 }
 
 function markCleared(itemId, session = null) {
@@ -239,6 +265,65 @@ function chunkHasChildren(chunk) {
   return Array.isArray(chunk.children?.chunks) && chunk.children.chunks.length > 0;
 }
 
+function teacherChunks(item) {
+  return item?.root?.chunks || [];
+}
+
+function splitBySlash(value) {
+  return String(value || "")
+    .split("/")
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
+}
+
+function createStudentChunksFromSlash(value) {
+  return splitBySlash(value).map((text) => ({
+    text,
+    role: "",
+    translation: "",
+  }));
+}
+
+function defaultSlashText(item) {
+  return item?.sentence || "";
+}
+
+function normalizedText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[.,!?;:()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function compareInterpretation(session) {
+  const teacher = teacherChunks(session.item);
+  const student = session.studentChunks;
+  const rows = [];
+  const count = Math.max(teacher.length, student.length);
+  let textMatches = 0;
+  let roleMatches = 0;
+  let translated = 0;
+  for (let index = 0; index < count; index += 1) {
+    const t = teacher[index] || null;
+    const s = student[index] || null;
+    const textMatch = Boolean(t && s && normalizedText(t.text) === normalizedText(s.text));
+    const roleMatch = Boolean(t && s && t.role === s.role);
+    if (textMatch) textMatches += 1;
+    if (roleMatch) roleMatches += 1;
+    if (s?.translation?.trim()) translated += 1;
+    rows.push({ index, teacher: t, student: s, textMatch, roleMatch });
+  }
+  return {
+    rows,
+    textMatches,
+    roleMatches,
+    translated,
+    totalTeacher: teacher.length,
+    totalStudent: student.length,
+  };
+}
+
 function flattenChunkSteps(chunks, depth = 0, parentPath = []) {
   const steps = [];
   chunks.forEach((chunk, index) => {
@@ -276,6 +361,16 @@ function newSession(item, options = {}) {
   };
 }
 
+function newInterpretationSession(item) {
+  return {
+    item,
+    stage: "split",
+    slashText: defaultSlashText(item),
+    studentChunks: [],
+    scoreSaved: false,
+  };
+}
+
 function currentStep() {
   return state.session?.steps[state.session.currentIndex] || null;
 }
@@ -299,9 +394,11 @@ async function loadDataset(datasetId) {
   state.datasetId = info.id;
   state.dataset = await fetch(info.url).then((r) => r.json());
   state.progress = loadProgress();
+  state.session = null;
+  state.interpretation = null;
   if (state.progress.lastItemId) {
     const item = findItem(state.progress.lastItemId);
-    if (item && isReadyItem(item)) state.session = newSession(item, { countAttempt: false });
+    if (item && isReadyItem(item)) state.interpretation = newInterpretationSession(item);
   }
 }
 
@@ -334,6 +431,7 @@ function bindShell() {
     if (!confirm(`「${studentLabel()}」の進捗をリセットしますか？`)) return;
     state.progress = defaultProgress();
     state.session = null;
+    state.interpretation = null;
     saveProgress();
     render();
   });
@@ -356,6 +454,7 @@ function renderPlayer() {
   view.appendChild(renderControls());
   view.appendChild(renderSummary());
   view.appendChild(renderProgressDetails());
+  if (state.interpretation) view.appendChild(renderInterpretationSession());
   if (state.session) view.appendChild(renderSession());
   view.appendChild(renderItemList());
 }
@@ -382,10 +481,12 @@ function renderControls() {
       savePreferredStudent();
       state.progress = loadProgress();
       state.session = null;
+      state.interpretation = null;
     },
     onchange: () => {
       state.progress = loadProgress();
       state.session = null;
+      state.interpretation = null;
       render();
     },
   });
@@ -399,23 +500,24 @@ function renderControls() {
       onclick: () => {
         const next = nextItem();
         if (next) {
-          state.session = newSession(next);
+          state.interpretation = newInterpretationSession(next);
+          state.session = null;
           render();
         }
       },
-    }, "未クリアから始める"),
+    }, "解釈作成を始める"),
     el("button", {
       class: "ghost",
       type: "button",
       onclick: () => {
-        const item = reviewItem();
+        const item = nextRoleDrillItem();
         if (item) {
+          state.interpretation = null;
           state.session = newSession(item);
-          state.playerFilter = "review";
           render();
         }
       },
-    }, "復習から始める"),
+    }, "確認モード"),
     el("button", {
       class: "ghost",
       type: "button",
@@ -423,7 +525,8 @@ function renderControls() {
         const lastItem = findItem(state.progress.lastItemId);
         const item = (isReadyItem(lastItem) && lastItem) || readyItems()[0];
         if (item) {
-          state.session = newSession(item);
+          state.interpretation = newInterpretationSession(item);
+          state.session = null;
           render();
         }
       },
@@ -439,6 +542,10 @@ function field(label, control) {
 }
 
 function nextItem() {
+  return readyItems().find((item) => !isInterpretationCleared(item.id)) || readyItems()[0] || null;
+}
+
+function nextRoleDrillItem() {
   return readyItems().find((item) => !isCleared(item.id)) || readyItems()[0] || null;
 }
 
@@ -447,9 +554,9 @@ function reviewItem() {
 }
 
 function filterItems(items) {
-  if (state.playerFilter === "open") return items.filter((item) => isReadyItem(item) && !isCleared(item.id));
+  if (state.playerFilter === "open") return items.filter((item) => isReadyItem(item) && !isInterpretationCleared(item.id));
   if (state.playerFilter === "review") return items.filter((item) => isReadyItem(item) && isReviewNeeded(item.id));
-  if (state.playerFilter === "cleared") return items.filter((item) => isReadyItem(item) && isCleared(item.id));
+  if (state.playerFilter === "cleared") return items.filter((item) => isReadyItem(item) && isInterpretationCleared(item.id));
   if (state.playerFilter === "editing") return items.filter((item) => !isReadyItem(item));
   return items;
 }
@@ -457,9 +564,9 @@ function filterItems(items) {
 function filterLabel(filter) {
   return {
     all: "すべて",
-    open: "未クリア",
+    open: "未解釈",
     review: "復習",
-    cleared: "クリア済み",
+    cleared: "解釈済み",
     editing: "編集待ち",
   }[filter] || "すべて";
 }
@@ -468,11 +575,11 @@ function renderSummary() {
   const items = state.dataset?.items || [];
   const ready = items.filter(isReadyItem);
   const editing = items.filter((item) => !isReadyItem(item)).length;
-  const cleared = ready.filter((item) => isCleared(item.id)).length;
+  const interpreted = ready.filter((item) => isInterpretationCleared(item.id)).length;
   const review = ready.filter((item) => isReviewNeeded(item.id)).length;
   const mistakeTotal = Object.values(state.progress.mistakes).flatMap((row) => Object.values(row)).reduce((a, b) => a + b, 0);
   return el("section", { class: "stats" },
-    statCell(cleared, `${ready.length}`, "クリア済み"),
+    statCell(interpreted, `${ready.length}`, "解釈済み"),
     statCell(editing, `${items.length}`, "編集待ち"),
     statCell(review, `${ready.length}`, "復習対象"),
     statCell(mistakeTotal, "", "誤答記録"),
@@ -522,6 +629,221 @@ function renderProgressDetails() {
         );
       })
     )
+  );
+}
+
+function renderInterpretationSession() {
+  const session = state.interpretation;
+  if (!session) return null;
+  const stageIndex = ["split", "roles", "translation", "compare"].indexOf(session.stage);
+  const steps = ["区切り", "役割", "直訳", "比較"];
+  return el("section", { class: "panel interpretationPanel" },
+    el("div", { class: "sessionHead" },
+      el("div", {},
+        el("p", { class: "label" }, session.item.source || "Interpretation"),
+        el("h2", {}, session.item.sentence)
+      ),
+      el("div", { class: "sessionActions" },
+        el("button", {
+          class: "ghost",
+          type: "button",
+          onclick: () => {
+            state.interpretation = newInterpretationSession(session.item);
+            render();
+          },
+        }, "この文をやり直す"),
+        el("button", { class: "ghost", type: "button", onclick: () => { state.interpretation = null; render(); } }, "一覧へ")
+      )
+    ),
+    el("div", { class: "stageRail", "aria-label": "解釈作成ステップ" },
+      ...steps.map((label, index) => el("div", {
+        class: `stageCell ${index === stageIndex ? "active" : ""} ${index < stageIndex ? "done" : ""}`,
+      },
+        el("span", {}, String(index + 2)),
+        el("strong", {}, label)
+      ))
+    ),
+    session.stage === "split" ? renderSplitStage(session) : null,
+    session.stage === "roles" ? renderRoleStage(session) : null,
+    session.stage === "translation" ? renderTranslationStage(session) : null,
+    session.stage === "compare" ? renderCompareStage(session) : null
+  );
+}
+
+function renderSplitStage(session) {
+  return el("div", { class: "interpretStage" },
+    el("p", { class: "label" }, "Step 2"),
+    el("h3", {}, "英文に区切りを入れる"),
+    el("p", { class: "hint" }, "意味のかたまりごとに / を入れます。あとで先生版と見比べます。"),
+    field("区切り入り英文", el("textarea", {
+      rows: "5",
+      oninput: (event) => {
+        session.slashText = event.target.value;
+      },
+    }, session.slashText)),
+    el("div", { class: "previewStrip" },
+      ...createStudentChunksFromSlash(session.slashText).map((chunk) => el("span", {}, chunk.text))
+    ),
+    el("div", { class: "actions" },
+      el("button", {
+        class: "primary",
+        type: "button",
+        onclick: () => {
+          const chunks = createStudentChunksFromSlash(session.slashText);
+          if (!chunks.length) {
+            alert("少なくとも1つの区切りを作ってください。");
+            return;
+          }
+          session.studentChunks = chunks;
+          session.stage = "roles";
+          render();
+        },
+      }, "役割付けへ")
+    )
+  );
+}
+
+function renderRoleStage(session) {
+  return el("div", { class: "interpretStage" },
+    el("p", { class: "label" }, "Step 3"),
+    el("h3", {}, "各かたまりの役割を付ける"),
+    el("p", { class: "hint" }, "S/V/O/C/M/接続を選びます。迷う箇所はMに寄せず、いったん自分の判断を残します。"),
+    el("div", { class: "studentChunkList" },
+      ...session.studentChunks.map((chunk, index) => el("div", { class: "studentChunkRow" },
+        el("span", { class: "itemNo" }, String(index + 1).padStart(2, "0")),
+        el("strong", {}, chunk.text),
+        el("select", {
+          onchange: (event) => {
+            chunk.role = event.target.value;
+          },
+        },
+          el("option", { value: "", selected: !chunk.role ? "selected" : null }, "未選択"),
+          ...ROLES.concat("接続").map((role) => el("option", {
+            value: role,
+            selected: chunk.role === role ? "selected" : null,
+          }, role))
+        )
+      ))
+    ),
+    el("div", { class: "actions" },
+      el("button", { class: "ghost", type: "button", onclick: () => { session.stage = "split"; render(); } }, "区切りへ戻る"),
+      el("button", {
+        class: "primary",
+        type: "button",
+        onclick: () => {
+          if (session.studentChunks.some((chunk) => !chunk.role)) {
+            alert("すべてのかたまりに役割を付けてください。");
+            return;
+          }
+          session.stage = "translation";
+          render();
+        },
+      }, "直訳へ")
+    )
+  );
+}
+
+function renderTranslationStage(session) {
+  return el("div", { class: "interpretStage" },
+    el("p", { class: "label" }, "Step 4"),
+    el("h3", {}, "かたまりごとに直訳を書く"),
+    el("p", { class: "hint" }, "きれいな日本語より、構造が見える訳を優先します。"),
+    el("div", { class: "translationRows" },
+      ...session.studentChunks.map((chunk, index) => el("label", { class: "translationRow" },
+        el("span", { class: "roleTag" }, chunk.role),
+        el("strong", {}, chunk.text),
+        el("textarea", {
+          rows: "2",
+          placeholder: "直訳",
+          oninput: (event) => {
+            chunk.translation = event.target.value;
+          },
+        }, chunk.translation || "")
+      ))
+    ),
+    el("div", { class: "actions" },
+      el("button", { class: "ghost", type: "button", onclick: () => { session.stage = "roles"; render(); } }, "役割へ戻る"),
+      el("button", {
+        class: "primary",
+        type: "button",
+        onclick: () => {
+          const score = compareInterpretation(session);
+          markInterpretationComplete(session.item.id, {
+            textMatches: score.textMatches,
+            roleMatches: score.roleMatches,
+            translated: score.translated,
+            totalTeacher: score.totalTeacher,
+            totalStudent: score.totalStudent,
+          });
+          session.scoreSaved = true;
+          session.stage = "compare";
+          render();
+        },
+      }, "先生版と比較")
+    )
+  );
+}
+
+function renderCompareStage(session) {
+  const score = compareInterpretation(session);
+  return el("div", { class: "interpretStage" },
+    el("p", { class: "label" }, "Step 5"),
+    el("h3", {}, "先生版と比較する"),
+    el("div", { class: "compareStats" },
+      statCell(score.textMatches, `${score.totalTeacher}`, "区切り一致"),
+      statCell(score.roleMatches, `${score.totalTeacher}`, "役割一致"),
+      statCell(score.translated, `${score.totalStudent}`, "訳入力")
+    ),
+    el("div", { class: "compareTable" },
+      ...score.rows.map((row) => renderCompareRow(row))
+    ),
+    el("div", { class: "actions" },
+      el("button", { class: "ghost", type: "button", onclick: () => { session.stage = "translation"; render(); } }, "自分の訳を直す"),
+      el("button", {
+        class: "primary",
+        type: "button",
+        onclick: () => {
+          const next = nextItem();
+          state.interpretation = next ? newInterpretationSession(next) : null;
+          render();
+        },
+      }, "次の文へ")
+    )
+  );
+}
+
+function renderCompareRow(row) {
+  const teacher = row.teacher;
+  const student = row.student;
+  return el("div", { class: `compareRow ${row.textMatch && row.roleMatch ? "match" : "diff"}` },
+    el("div", { class: "compareSide" },
+      el("p", { class: "label" }, "Your Work"),
+      student
+        ? [
+            el("strong", {}, student.text),
+            el("p", {}, el("span", { class: "roleTag" }, student.role || "-"), student.translation || "訳なし"),
+          ]
+        : el("p", { class: "hint" }, "対応する区切りなし")
+    ),
+    el("div", { class: "compareSide teacher" },
+      el("p", { class: "label" }, "Teacher Model"),
+      teacher
+        ? [
+            el("strong", {}, teacher.text),
+            el("p", {}, el("span", { class: "roleTag" }, teacher.role), chunkTranslation(teacher) || "訳なし"),
+            chunkHasChildren(teacher) ? renderTeacherChildren(teacher.children.chunks) : null,
+          ]
+        : el("p", { class: "hint" }, "先生版にはない追加区切り")
+    )
+  );
+}
+
+function renderTeacherChildren(chunks) {
+  return el("div", { class: "teacherChildren" },
+    ...chunks.map((chunk) => el("div", {},
+      el("span", { class: "roleTag" }, chunk.role),
+      el("span", {}, `${chunk.text} / ${chunkTranslation(chunk)}`)
+    ))
   );
 }
 
@@ -695,15 +1017,17 @@ function renderItemList() {
     visibleItems.length ? el("div", { class: "itemList" },
       ...visibleItems.map((item) => {
         const att = itemAttempt(item.id);
+        const interpretation = interpretationAttempt(item.id);
         const originalIndex = items.findIndex((candidate) => candidate.id === item.id);
         const ready = isReadyItem(item);
         return el("button", {
           type: "button",
-          class: `itemRow ${isCleared(item.id) ? "cleared" : ""} ${isReviewNeeded(item.id) ? "review" : ""} ${!ready ? "editing" : ""}`,
+          class: `itemRow ${isInterpretationCleared(item.id) ? "cleared" : ""} ${isReviewNeeded(item.id) ? "review" : ""} ${!ready ? "editing" : ""}`,
           disabled: ready ? null : "disabled",
           onclick: () => {
             if (!ready) return;
-            state.session = newSession(item);
+            state.interpretation = newInterpretationSession(item);
+            state.session = null;
             render();
           },
         },
@@ -711,7 +1035,7 @@ function renderItemList() {
           el("span", { class: "itemMain" },
             el("strong", {}, item.sentence),
             el("small", {}, ready
-              ? `${item.source || ""} / 挑戦 ${att.attempts || 0} / 正解 ${att.correct || 0} / 誤答 ${att.wrong || 0}${att.lastAt ? ` / 最終 ${formatDateTime(att.lastAt)}` : ""}`
+              ? `${item.source || ""} / 解釈 ${interpretation.attempts || 0}${interpretation.lastAt ? ` / 最終 ${formatDateTime(interpretation.lastAt)}` : ""} / 確認 ${att.attempts || 0} / 誤答 ${att.wrong || 0}`
               : `${item.source || ""} / ${item.editNote || "編集待ち"}`)
           ),
           el("span", { class: "itemStatus" }, itemStatusLabel(item))
@@ -735,9 +1059,9 @@ function formatDateTime(value) {
 
 function itemStatusLabel(item) {
   if (!isReadyItem(item)) return "EDIT";
-  const att = itemAttempt(item.id);
   if (isReviewNeeded(item.id)) return "REVIEW";
-  if (isCleared(item.id)) return "CLEAR";
+  if (isInterpretationCleared(item.id)) return "DONE";
+  if (isCleared(item.id)) return "CHECK";
   return "OPEN";
 }
 
@@ -745,9 +1069,9 @@ function renderFilterButtons(items) {
   const ready = items.filter(isReadyItem);
   const counts = {
     all: items.length,
-    open: ready.filter((item) => !isCleared(item.id)).length,
+    open: ready.filter((item) => !isInterpretationCleared(item.id)).length,
     review: ready.filter((item) => isReviewNeeded(item.id)).length,
-    cleared: ready.filter((item) => isCleared(item.id)).length,
+    cleared: ready.filter((item) => isInterpretationCleared(item.id)).length,
     editing: items.filter((item) => !isReadyItem(item)).length,
   };
   return el("div", { class: "filterButtons", role: "group", "aria-label": "文リスト表示" },
