@@ -6,7 +6,9 @@
     "version": 1,
     "note": "英検2級 大問1の保存済み問題を完全文化して文単位で取り込み。status=editing は編集待ち。",
     "importedFrom": "英語/英検2級_大問1アプリ/data/questions_2026-1.json",
-    "importedAt": "2026-06-30T13:45:41.088Z"
+    "importedAt": "2026-06-30T13:45:41.088Z",
+    "lastEditedFrom": "C:/Users/shtom/Downloads/custom-reading-set.json",
+    "lastEditedAt": "2026-07-01T01:04:40.138Z"
   },
   "items": [
     {
@@ -46,17 +48,34 @@
     },
     {
       "id": "eiken2-2026-1_q1_s2",
-      "status": "editing",
       "source": "英検2級 2026年度第1回 大問1 Q1 / sentence 2",
       "sentence": "However, in some countries, she may wear a red dress.",
-      "translation": "多くの国では、花嫁は結婚式で白いドレスを着る。しかし一部の国では赤いドレスを着ることもある。",
-      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
       "root": {
         "chunks": [
           {
+            "text": "However,",
             "role": "M",
-            "text": "However, in some countries, she may wear a red dress.",
-            "translation": ""
+            "translation": "しかし、"
+          },
+          {
+            "text": "in some countries,",
+            "role": "M",
+            "translation": "いくつかの国々の中で、"
+          },
+          {
+            "text": "she",
+            "role": "S",
+            "translation": "彼女は"
+          },
+          {
+            "text": "may wear",
+            "role": "V",
+            "translation": "着るかもしれない"
+          },
+          {
+            "text": "a red dress.",
+            "role": "O",
+            "translation": "赤いドレスを"
           }
         ]
       }
