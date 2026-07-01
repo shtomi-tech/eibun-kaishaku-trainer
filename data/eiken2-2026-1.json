@@ -7,8 +7,8 @@
     "note": "英検2級 大問1の保存済み問題を完全文化して文単位で取り込み。status=editing は編集待ち。",
     "importedFrom": "英語/英検2級_大問1アプリ/data/questions_2026-1.json",
     "importedAt": "2026-06-30T13:45:41.088Z",
-    "lastEditedFrom": "C:/Users/shtom/Downloads/custom-reading-set.json",
-    "lastEditedAt": "2026-07-01T01:04:40.138Z"
+    "lastEditedFrom": "C:/Users/shtom/Downloads/custom-reading-set (1).json",
+    "lastEditedAt": "2026-07-01T01:08:09.303Z"
   },
   "items": [
     {
@@ -117,17 +117,34 @@
     },
     {
       "id": "eiken2-2026-1_q2_s2",
-      "status": "editing",
       "source": "英検2級 2026年度第1回 大問1 Q2 / sentence 2",
       "sentence": "She wanted them to learn about countries that are far away from Japan.",
-      "translation": "先生は生徒たちに地球儀でアルゼンチンを探すよう言った。日本から遠い国について学ばせたかったのだ。",
-      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
       "root": {
         "chunks": [
           {
+            "text": "She",
+            "role": "S",
+            "translation": "彼女は"
+          },
+          {
+            "text": "wanted",
+            "role": "V",
+            "translation": "望んだ"
+          },
+          {
+            "text": "them",
+            "role": "O",
+            "translation": "彼らが"
+          },
+          {
+            "text": "to learn",
+            "role": "C",
+            "translation": "学ぶことを"
+          },
+          {
+            "text": "about countries that are far away from Japan.",
             "role": "M",
-            "text": "She wanted them to learn about countries that are far away from Japan.",
-            "translation": ""
+            "translation": "日本から離れた国々について"
           }
         ]
       }
@@ -169,17 +186,24 @@
     },
     {
       "id": "eiken2-2026-1_q3_s2",
-      "status": "editing",
       "source": "英検2級 2026年度第1回 大問1 Q3 / sentence 2",
       "sentence": "Everyone is surprised by how quickly she has learned the language.",
-      "translation": "ユキは2年前に韓国語を学び始めたばかりだが、もう難なく新聞を読める。誰もが習得の速さに驚いている。",
-      "editNote": "編集待ち: Codexまたは先生エディタでchunk/role/translationを確定してください。",
       "root": {
         "chunks": [
           {
+            "text": "Everyone",
+            "role": "S",
+            "translation": "皆は"
+          },
+          {
+            "text": "is surprised",
+            "role": "V",
+            "translation": "驚いた"
+          },
+          {
+            "text": "by how quickly she has learned the language.",
             "role": "M",
-            "text": "Everyone is surprised by how quickly she has learned the language.",
-            "translation": ""
+            "translation": "そんなに早くその言語を習得したことに"
           }
         ]
       }
