@@ -56,6 +56,7 @@ function defaultEditorState() {
     chunks: [],
     selectedChunk: -1,
     savedItems: [],
+    removedItemIds: [],
     editNote: "",
     rawJson: "",
   };
@@ -1080,11 +1081,18 @@ function renderEditingQueue() {
           el("strong", {}, item.sentence || item.id),
           el("small", {}, `${item.source || ""}${item.editNote ? ` / ${item.editNote}` : ""}`)
         ),
-        el("button", {
-          class: "tiny ghost",
-          type: "button",
-          onclick: () => loadEditorItem(item),
-        }, state.editor.itemId === item.id ? "編集中" : "開く")
+        el("div", { class: "childActions" },
+          el("button", {
+            class: "tiny ghost",
+            type: "button",
+            onclick: () => loadEditorItem(item),
+          }, state.editor.itemId === item.id ? "編集中" : "開く"),
+          el("button", {
+            class: "tiny danger",
+            type: "button",
+            onclick: () => removeEditingItem(item),
+          }, "削除")
+        )
       ))
     )
   );
@@ -1173,6 +1181,24 @@ function saveCurrentItemReady() {
   addCurrentItemToDataset();
 }
 
+function removeEditingItem(item) {
+  if (!item?.id) return;
+  if (!confirm(`「${item.sentence || item.id}」を編集待ちから削除しますか？`)) return;
+  if (state.dataset?.items) {
+    state.dataset.items = state.dataset.items.filter((candidate) => candidate.id !== item.id);
+  }
+  state.editor.savedItems = state.editor.savedItems.filter((candidate) => candidate.id !== item.id);
+  if (!state.editor.removedItemIds.includes(item.id)) state.editor.removedItemIds.push(item.id);
+  if (state.editor.itemId === item.id) state.editor = {
+    ...defaultEditorState(),
+    datasetId: state.editor.datasetId,
+    datasetLabel: state.editor.datasetLabel,
+    savedItems: state.editor.savedItems,
+    removedItemIds: state.editor.removedItemIds,
+  };
+  renderEditor();
+}
+
 function loadEditorItem(item) {
   state.editor.source = item.source || "JSON読込";
   state.editor.itemId = item.id || `custom_${Date.now()}`;
@@ -1224,6 +1250,7 @@ function editorDataset() {
       label: state.editor.datasetLabel || "自作 英文解釈",
       source: "英文解釈トレーナー 先生エディタ",
       version: 1,
+      removedItemIds: state.editor.removedItemIds || [],
     },
     items,
   };
@@ -1268,6 +1295,7 @@ function importJsonFromTextarea() {
       chunks: cloneItem(item).root.chunks,
       selectedChunk: item.root.chunks.length ? 0 : -1,
       savedItems,
+      removedItemIds: parsed.meta?.removedItemIds || state.editor.removedItemIds || [],
       editNote: item.editNote || "",
       rawJson: text,
     };
@@ -1283,8 +1311,8 @@ function downloadEditorJson() {
 
 function downloadDatasetJson() {
   const dataset = editorDataset();
-  if (!dataset.items.length) {
-    alert("保存できる文がありません。先にchunkと訳を入力してください。");
+  if (!dataset.items.length && !dataset.meta.removedItemIds?.length) {
+    alert("保存できる文や削除記録がありません。先にchunkと訳を入力するか、編集待ちを削除してください。");
     return;
   }
   downloadJson(`${dataset.meta.id || "reading-dataset"}.json`, dataset);

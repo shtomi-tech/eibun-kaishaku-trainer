@@ -92,6 +92,16 @@ button.tiny {
   font-size: 12px;
 }
 
+button.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+button.danger:hover {
+  background: var(--danger);
+  color: var(--parchment);
+}
+
 input,
 select,
 textarea {

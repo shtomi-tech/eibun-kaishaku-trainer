@@ -2,6 +2,7 @@
   "scripts": {
     "build": "node tools/build-netlify.mjs",
     "import:eiken2": "node tools/import-eiken2-q1.mjs",
+    "apply:editor": "node tools/apply-editor-json.mjs",
     "deploy": "netlify deploy --prod"
   }
 }
