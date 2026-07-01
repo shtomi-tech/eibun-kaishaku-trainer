@@ -1,6 +1,14 @@
 "use strict";
 
 const ROLES = ["S", "V", "O", "C", "M"];
+const SENTENCE_PATTERNS = [
+  { id: "SV", label: "第1文型 SV" },
+  { id: "SVC", label: "第2文型 SVC" },
+  { id: "SVO", label: "第3文型 SVO" },
+  { id: "SVOO", label: "第4文型 SVOO" },
+  { id: "SVOC", label: "第5文型 SVOC" },
+  { id: "special", label: "その他・特殊構文" },
+];
 const STORE_PREFIX = "reading_trainer_v1";
 const DEFAULT_STUDENT = "default";
 
@@ -269,6 +277,57 @@ function teacherChunks(item) {
   return item?.root?.chunks || [];
 }
 
+function patternLabel(patternId) {
+  return SENTENCE_PATTERNS.find((pattern) => pattern.id === patternId)?.label || patternId || "未判定";
+}
+
+function normalizePatternId(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  const compact = raw.toUpperCase().replace(/[第文型\s]/g, "");
+  if (compact.includes("SVOC")) return "SVOC";
+  if (compact.includes("SVOO")) return "SVOO";
+  if (compact.includes("SVC")) return "SVC";
+  if (compact.includes("SVO")) return "SVO";
+  if (compact.includes("SV")) return "SV";
+  if (["1", "SV"].includes(compact)) return "SV";
+  if (["2", "SVC"].includes(compact)) return "SVC";
+  if (["3", "SVO"].includes(compact)) return "SVO";
+  if (["4", "SVOO"].includes(compact)) return "SVOO";
+  if (["5", "SVOC"].includes(compact)) return "SVOC";
+  if (raw.includes("その他") || raw.includes("特殊") || raw.toLowerCase() === "special") return "special";
+  return raw;
+}
+
+function inferPatternFromChunks(chunks) {
+  const core = [];
+  for (const chunk of chunks || []) {
+    if (["S", "V", "O", "C"].includes(chunk.role)) core.push(chunk.role);
+  }
+  const signature = core.join("");
+  if (signature === "SV") return "SV";
+  if (signature === "SVC") return "SVC";
+  if (signature === "SVO") return "SVO";
+  if (signature === "SVOO") return "SVOO";
+  if (signature === "SVOC") return "SVOC";
+  return "special";
+}
+
+function teacherPattern(item) {
+  return normalizePatternId(item?.sentencePattern || item?.pattern || inferPatternFromChunks(teacherChunks(item)));
+}
+
+function patternEvidence(chunks) {
+  const grouped = { S: [], V: [], O: [], C: [], M: [] };
+  for (const chunk of chunks || []) {
+    if (grouped[chunk.role]) grouped[chunk.role].push(chunk.text);
+  }
+  return ["S", "V", "O", "C", "M"]
+    .filter((role) => grouped[role].length)
+    .map((role) => `${role} = ${grouped[role].join(" / ")}`)
+    .join("、");
+}
+
 function splitBySlash(value) {
   return String(value || "")
     .split("/")
@@ -318,6 +377,7 @@ function compareInterpretation(session) {
     rows,
     textMatches,
     roleMatches,
+    patternMatch: normalizePatternId(session.studentPattern) === teacherPattern(session.item),
     translated,
     totalTeacher: teacher.length,
     totalStudent: student.length,
@@ -367,6 +427,7 @@ function newInterpretationSession(item) {
     stage: "split",
     slashText: defaultSlashText(item),
     studentChunks: [],
+    studentPattern: "",
     scoreSaved: false,
   };
 }
@@ -635,8 +696,8 @@ function renderProgressDetails() {
 function renderInterpretationSession() {
   const session = state.interpretation;
   if (!session) return null;
-  const stageIndex = ["split", "roles", "translation", "compare"].indexOf(session.stage);
-  const steps = ["区切り", "役割", "直訳", "比較"];
+  const stageIndex = ["split", "roles", "pattern", "translation", "compare"].indexOf(session.stage);
+  const steps = ["区切り", "役割", "文型", "直訳", "比較"];
   return el("section", { class: "panel interpretationPanel" },
     el("div", { class: "sessionHead" },
       el("div", {},
@@ -665,6 +726,7 @@ function renderInterpretationSession() {
     ),
     session.stage === "split" ? renderSplitStage(session) : null,
     session.stage === "roles" ? renderRoleStage(session) : null,
+    session.stage === "pattern" ? renderPatternStage(session) : null,
     session.stage === "translation" ? renderTranslationStage(session) : null,
     session.stage === "compare" ? renderCompareStage(session) : null
   );
@@ -735,6 +797,46 @@ function renderRoleStage(session) {
             alert("すべてのかたまりに役割を付けてください。");
             return;
           }
+          session.studentPattern = session.studentPattern || inferPatternFromChunks(session.studentChunks);
+          session.stage = "pattern";
+          render();
+        },
+      }, "文型判定へ")
+    )
+  );
+}
+
+function renderPatternStage(session) {
+  const inferred = inferPatternFromChunks(session.studentChunks);
+  return el("div", { class: "interpretStage" },
+    el("p", { class: "label" }, "Step 4"),
+    el("h3", {}, "文全体の文型を選ぶ"),
+    el("p", { class: "hint" }, "S/V/O/C をもとに、第1文型〜第5文型で判断します。迷う文はその他・特殊構文を選びます。"),
+    el("div", { class: "patternHint" },
+      el("p", { class: "label" }, "Your Structure"),
+      el("p", {}, patternEvidence(session.studentChunks) || "S/V/O/C がまだありません。"),
+      el("p", { class: "hint" }, `役割からの自動推定: ${patternLabel(inferred)}`)
+    ),
+    el("div", { class: "patternChoices", role: "group", "aria-label": "文型選択" },
+      ...SENTENCE_PATTERNS.map((pattern) => el("button", {
+        type: "button",
+        class: `patternChoice ${normalizePatternId(session.studentPattern) === pattern.id ? "active" : ""}`,
+        onclick: () => {
+          session.studentPattern = pattern.id;
+          render();
+        },
+      }, pattern.label))
+    ),
+    el("div", { class: "actions" },
+      el("button", { class: "ghost", type: "button", onclick: () => { session.stage = "roles"; render(); } }, "役割へ戻る"),
+      el("button", {
+        class: "primary",
+        type: "button",
+        onclick: () => {
+          if (!session.studentPattern) {
+            alert("文型を選んでください。");
+            return;
+          }
           session.stage = "translation";
           render();
         },
@@ -745,7 +847,7 @@ function renderRoleStage(session) {
 
 function renderTranslationStage(session) {
   return el("div", { class: "interpretStage" },
-    el("p", { class: "label" }, "Step 4"),
+    el("p", { class: "label" }, "Step 5"),
     el("h3", {}, "かたまりごとに直訳を書く"),
     el("p", { class: "hint" }, "きれいな日本語より、構造が見える訳を優先します。"),
     el("div", { class: "translationRows" },
@@ -762,7 +864,7 @@ function renderTranslationStage(session) {
       ))
     ),
     el("div", { class: "actions" },
-      el("button", { class: "ghost", type: "button", onclick: () => { session.stage = "roles"; render(); } }, "役割へ戻る"),
+      el("button", { class: "ghost", type: "button", onclick: () => { session.stage = "pattern"; render(); } }, "文型へ戻る"),
       el("button", {
         class: "primary",
         type: "button",
@@ -771,6 +873,9 @@ function renderTranslationStage(session) {
           markInterpretationComplete(session.item.id, {
             textMatches: score.textMatches,
             roleMatches: score.roleMatches,
+            patternMatch: score.patternMatch,
+            studentPattern: normalizePatternId(session.studentPattern),
+            teacherPattern: teacherPattern(session.item),
             translated: score.translated,
             totalTeacher: score.totalTeacher,
             totalStudent: score.totalStudent,
@@ -787,11 +892,13 @@ function renderTranslationStage(session) {
 function renderCompareStage(session) {
   const score = compareInterpretation(session);
   return el("div", { class: "interpretStage" },
-    el("p", { class: "label" }, "Step 5"),
+    el("p", { class: "label" }, "Step 6"),
     el("h3", {}, "先生版と比較する"),
+    renderPatternCompare(session, score),
     el("div", { class: "compareStats" },
       statCell(score.textMatches, `${score.totalTeacher}`, "区切り一致"),
       statCell(score.roleMatches, `${score.totalTeacher}`, "役割一致"),
+      statCell(score.patternMatch ? "OK" : "CHECK", "", "文型"),
       statCell(score.translated, `${score.totalStudent}`, "訳入力")
     ),
     el("div", { class: "compareTable" },
@@ -808,6 +915,22 @@ function renderCompareStage(session) {
           render();
         },
       }, "次の文へ")
+    )
+  );
+}
+
+function renderPatternCompare(session, score) {
+  const teacher = teacherPattern(session.item);
+  const student = normalizePatternId(session.studentPattern);
+  return el("div", { class: `patternCompare ${score.patternMatch ? "match" : "diff"}` },
+    el("div", {},
+      el("p", { class: "label" }, "Your Pattern"),
+      el("strong", {}, patternLabel(student))
+    ),
+    el("div", {},
+      el("p", { class: "label" }, "Teacher Pattern"),
+      el("strong", {}, patternLabel(teacher)),
+      el("p", { class: "hint" }, session.item.patternNote || patternEvidence(teacherChunks(session.item)) || "根拠メモなし")
     )
   );
 }

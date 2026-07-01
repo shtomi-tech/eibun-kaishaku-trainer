@@ -392,7 +392,7 @@ h3 { font-size: 20px; }
 
 .stageRail {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid var(--ink);
   border-left: 1px solid var(--ink);
   margin: 16px 0;
@@ -469,6 +469,58 @@ h3 { font-size: 20px; }
   margin: 14px 0;
 }
 
+.patternHint,
+.patternCompare {
+  border: 1px solid var(--ink);
+  background: var(--parchment);
+  padding: 12px;
+  margin: 12px 0;
+}
+
+.patternHint p,
+.patternCompare p {
+  margin: 6px 0 0;
+}
+
+.patternChoices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.patternChoice {
+  min-height: 54px;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: left;
+}
+
+.patternChoice:hover,
+.patternChoice.active {
+  background: var(--ink);
+  color: var(--parchment);
+}
+
+.patternCompare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: 0;
+}
+
+.patternCompare > div {
+  padding: 12px;
+}
+
+.patternCompare > div + div {
+  border-left: 1px solid var(--ink);
+}
+
+.patternCompare.diff {
+  border-color: var(--clay);
+}
+
 .studentChunkRow {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) minmax(120px, 160px);
@@ -501,7 +553,7 @@ h3 { font-size: 20px; }
 
 .compareStats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--ink);
   border-left: 1px solid var(--ink);
   margin: 12px 0;
@@ -937,11 +989,18 @@ h3 { font-size: 20px; }
   .childRow,
   .savedRow,
   .stageRail,
+  .patternChoices,
+  .patternCompare,
   .studentChunkRow,
   .translationRow,
   .compareStats,
   .compareRow {
     grid-template-columns: 1fr;
+  }
+
+  .patternCompare > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--ink);
   }
 
   .compareSide + .compareSide {
