@@ -1,3 +1,17 @@
 .netlify/
 dist/
 node_modules/
+__pycache__/
+*.pyc
+*.pyo
+
+# Local data and backups
+*.db
+*.db-journal
+*.db.bak-*
+data.db.bak*
+*.bak
+*.bak2
+_削除候補/
+.DS_Store
+Thumbs.db
